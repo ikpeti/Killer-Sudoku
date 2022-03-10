@@ -1,0 +1,17 @@
+C:\Users\Peti\Documents\GitHub\Killer-Sudoku\Killer_Sudoku\Killer_Sudoku\bin\Debug\netcoreapp3.1\KillerSudoku.exe
+C:\Users\Peti\Documents\GitHub\Killer-Sudoku\Killer_Sudoku\Killer_Sudoku\bin\Debug\netcoreapp3.1\KillerSudoku.deps.json
+C:\Users\Peti\Documents\GitHub\Killer-Sudoku\Killer_Sudoku\Killer_Sudoku\bin\Debug\netcoreapp3.1\KillerSudoku.runtimeconfig.json
+C:\Users\Peti\Documents\GitHub\Killer-Sudoku\Killer_Sudoku\Killer_Sudoku\bin\Debug\netcoreapp3.1\KillerSudoku.runtimeconfig.dev.json
+C:\Users\Peti\Documents\GitHub\Killer-Sudoku\Killer_Sudoku\Killer_Sudoku\bin\Debug\netcoreapp3.1\KillerSudoku.dll
+C:\Users\Peti\Documents\GitHub\Killer-Sudoku\Killer_Sudoku\Killer_Sudoku\bin\Debug\netcoreapp3.1\KillerSudoku.pdb
+C:\Users\Peti\Documents\GitHub\Killer-Sudoku\Killer_Sudoku\Killer_Sudoku\obj\Debug\netcoreapp3.1\KillerSudoku.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Peti\Documents\GitHub\Killer-Sudoku\Killer_Sudoku\Killer_Sudoku\obj\Debug\netcoreapp3.1\KillerSudoku.AssemblyInfoInputs.cache
+C:\Users\Peti\Documents\GitHub\Killer-Sudoku\Killer_Sudoku\Killer_Sudoku\obj\Debug\netcoreapp3.1\KillerSudoku.AssemblyInfo.cs
+C:\Users\Peti\Documents\GitHub\Killer-Sudoku\Killer_Sudoku\Killer_Sudoku\obj\Debug\netcoreapp3.1\KillerSudoku.csproj.CoreCompileInputs.cache
+C:\Users\Peti\Documents\GitHub\Killer-Sudoku\Killer_Sudoku\Killer_Sudoku\obj\Debug\netcoreapp3.1\KillerSudoku.dll
+C:\Users\Peti\Documents\GitHub\Killer-Sudoku\Killer_Sudoku\Killer_Sudoku\obj\Debug\netcoreapp3.1\KillerSudoku.pdb
+C:\Users\Peti\Documents\GitHub\Killer-Sudoku\Killer_Sudoku\Killer_Sudoku\obj\Debug\netcoreapp3.1\KillerSudoku.genruntimeconfig.cache
+C:\Users\Peti\Documents\GitHub\Killer-Sudoku\Killer_Sudoku\Killer_Sudoku\bin\Debug\netcoreapp3.1\GeneticSharp.Domain.dll
+C:\Users\Peti\Documents\GitHub\Killer-Sudoku\Killer_Sudoku\Killer_Sudoku\bin\Debug\netcoreapp3.1\GeneticSharp.Infrastructure.Framework.dll
+C:\Users\Peti\Documents\GitHub\Killer-Sudoku\Killer_Sudoku\Killer_Sudoku\obj\Debug\netcoreapp3.1\KillerSudoku.csproj.AssemblyReference.cache
+C:\Users\Peti\Documents\GitHub\Killer-Sudoku\Killer_Sudoku\Killer_Sudoku\obj\Debug\netcoreapp3.1\KillerSudoku.csproj.CopyComplete
