@@ -51,16 +51,33 @@ namespace Killer_Sudoku
 
         public bool CheckBoard()
         {
-            bool[] check = new bool[size];
-            
+            if (!checkRow()) return false;
+            if (!checkColumn()) return false;
+            if (!checkSquare()) return false;
+
+            return true;
+        }
+        public int GetSize()
+        {
+            return size;
+        }
+
+        private void initCheck(bool[] check)
+        {
             for (int j = 0; j < size; j++)
             {
                 check[j] = false;
             }
+        }
+        private bool checkRow()
+        {
+            bool[] check = new bool[size];
 
-            for (int i = 0; i<size; i++)
+            initCheck(check);
+
+            for (int i = 0; i < size; i++)
             {
-                for(int j = 0;j<size;j++)
+                for (int j = 0; j < size; j++)
                 {
                     if (board[i, j] != 0)
                     {
@@ -68,18 +85,66 @@ namespace Killer_Sudoku
                         else check[board[i, j] - 1] = true;
                     }
                 }
-            
-                for (int j = 0; j < size; j++)
-                {
-                    check[j] = false;
-                }
+                initCheck(check);
             }
-
             return true;
         }
-        public int GetSize()
+
+        private bool checkColumn()
         {
-            return size;
+            bool[] check = new bool[size];
+
+            initCheck(check);
+
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    if (board[j, i] != 0)
+                    {
+                        if (check[board[j, i] - 1]) return false;
+                        else check[board[j, i] - 1] = true;
+                    }
+                }
+                initCheck(check);
+            }
+            return true;
+        }
+
+        private bool checkSquare()
+        {
+            bool[] check = new bool[size];
+
+            initCheck(check);
+
+            for(int j = 0; j < 4; j++)
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    if (board[j, i] != 0)
+                    {
+                        if (check[board[j, i] - 1]) return false;
+                        else check[board[j, i] - 1] = true;
+                    }
+                }
+                if (j == 1) initCheck(check);
+            }
+
+            initCheck(check);
+
+            for (int j = 0; j < 4; j++)
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    if (board[i, j] != 0)
+                    {
+                        if (check[board[i, j] - 1]) return false;
+                        else check[board[i, j] - 1] = true;
+                    }
+                }
+                if (j == 1) initCheck(check);
+            }
+            return true;
         }
     }
 }
