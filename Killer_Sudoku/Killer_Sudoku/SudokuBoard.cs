@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Killer_Sudoku
+namespace KillerSudoku
 {
     public class SudokuBoard
     {
@@ -13,6 +13,11 @@ namespace Killer_Sudoku
         {
             size = s;
             board = new int[size, size];
+        }
+
+        public void Set(int x, int y, int value)
+        {
+            board[x, y] = value;
         }
 
         public void ReadInput()
@@ -60,6 +65,11 @@ namespace Killer_Sudoku
         public int GetSize()
         {
             return size;
+        }
+
+        public int[,] GetBoard()
+        {
+            return board;
         }
 
         private void initCheck(bool[] check)
