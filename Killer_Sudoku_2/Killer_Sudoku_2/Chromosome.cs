@@ -4,26 +4,29 @@ using System.Text;
 
 namespace Killer_Sudoku_2
 {
-    public class Chromosome<T>
+    public class Chromosome
     {
-        public T[] Genes { get; private set; }
+        public int[][] Genes { get; private set; }
+        public int[][] SudokuProblem { get; private set; }
         public double Fitness { get; private set; }
         private Random random;
-        private Func<T> getRandomGene;
-        Func<int, double> fitnessFunction;
-        public Chromosome(int size, Random r, Func<T> getRandomGene, Func<int, double> fitnessFunction, bool firstTime = true)
+        private Action<int[][]> getRandomGenes;
+        private Func<int, double> fitnessFunction;
+        public Chromosome(int size, int[][] sudoku, Random r, Action<int[][]> getRandomGenes, Func<int, double> fitnessFunction, bool firstTime = true)
         {
-            Genes = new T[size];
+            Genes = new int[size][];
+            for (int i = 0; i < size; i++)
+            {
+                Genes[i] = new int[size];
+            }
+            SudokuProblem = sudoku;
             random = r;
-            this.getRandomGene = getRandomGene;
+            this.getRandomGenes = getRandomGenes;
             this.fitnessFunction = fitnessFunction;
 
             if (firstTime)
             {
-                for (int i = 0; i < Genes.Length; i++)
-                {
-                    Genes[i] = getRandomGene();
-                }
+                getRandomGenes(Genes);
             }
         }
 
@@ -33,9 +36,9 @@ namespace Killer_Sudoku_2
             return Fitness;
         }
 
-        public Chromosome<T> Crossover(Chromosome<T> otherParent)
+        public Chromosome Crossover(Chromosome otherParent)
         {
-            Chromosome<T> child = new Chromosome<T>(Genes.Length, random, getRandomGene, fitnessFunction, firstTime : false);
+            Chromosome child = new Chromosome(Genes.Length, SudokuProblem, random, getRandomGenes, fitnessFunction, firstTime : false);
 
             for (int i = 0; i < Genes.Length; i++)
             {
@@ -47,11 +50,31 @@ namespace Killer_Sudoku_2
 
         public void Mutate(double mutationRate)
         {
+            int[][] indexes = new int[Genes.Length][];
+
             for (int i = 0; i < Genes.Length; i++)
             {
-                if(random.NextDouble() < mutationRate)
+                if (random.NextDouble() < mutationRate)
                 {
-                    Genes[i] = getRandomGene();
+                    int a = random.Next(0, Genes.Length);
+                    int b = random.Next(0, Genes.Length);
+
+                    if (SudokuProblem[i][a] != 0 || SudokuProblem[i][b] != 0)
+                        return;
+
+                    indexes[i] = new int[] { a, b };
+                }
+                else
+                    indexes[i] = new int[] { 0 };
+            }
+
+            for (int i = 0; i < Genes.Length; i++)
+            {
+                if(indexes[i][0] != 0)
+                {
+                    int tmp = Genes[i][indexes[i][0]];
+                    Genes[i][indexes[i][0]] = Genes[i][indexes[i][1]];
+                    Genes[i][indexes[i][1]] = tmp;
                 }
             }
         }
