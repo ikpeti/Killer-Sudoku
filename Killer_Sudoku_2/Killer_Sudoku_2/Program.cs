@@ -20,30 +20,24 @@ namespace Killer_Sudoku_2
             board[1] = new int[] { 0, 0, 0, 2 };
             board[2] = new int[] { 0, 0, 0, 4 };
             board[3] = new int[] { 3, 0, 0, 0 };
-            geneticAlgorithm = new GeneticAlgorithm(21, 4, board, random, getRandomGenes, FitnessFunction);
-             
-            printBoard(board);
 
             numberValues = new Dictionary<int, int>();
             for (int i = 0; i < size; i++)
             {
                 numberValues.Add(i + 1, 0);
             }
-            
+
+            geneticAlgorithm = new GeneticAlgorithm(21, 4, board, random, getRandomGenes, FitnessFunction);
+             
+            printBoard(board);
+
             while (geneticAlgorithm.BestFitness != 0)
             {
                 geneticAlgorithm.NewGeneration();
                 Console.Write(geneticAlgorithm.Generation+", ");
                 Console.Write(geneticAlgorithm.Population.Count+", ");
                 Console.WriteLine();
-                for (int i = 0; i < geneticAlgorithm.BestGenes.Length; i++)
-                {
-                    for (int j = 0; j < size; j++)
-                    {
-                        Console.Write(geneticAlgorithm.BestGenes[i][j]);
-                    }
-                    Console.WriteLine();
-                }
+                printBoard(geneticAlgorithm.BestGenes);
                 Console.WriteLine(geneticAlgorithm.BestFitness);
             }
 
@@ -54,13 +48,19 @@ namespace Killer_Sudoku_2
         //TODO
         private static void printBoard(int[][] board)
         {
-            for (int i = 0; i < size; i++)
+            for (int x = 0; x < board.Length; x += (int)Math.Sqrt(size))
             {
-                for (int j = 0; j < size; j++)
+                for (int y = 0; y < board.Length; y += (int)Math.Sqrt(size))
                 {
-                    Console.Write(board[i][j] + " ");
+                    for (int j = x; j < x + (int)Math.Sqrt(size); j++)
+                    {
+                        for (int k = y; k < y + (int)Math.Sqrt(size); k++)
+                        {
+                            Console.Write(board[j][k]);
+                        }
+                    }
+                    Console.WriteLine("");
                 }
-                Console.WriteLine();
             }
         }
 
@@ -70,12 +70,25 @@ namespace Killer_Sudoku_2
             {
                 for (int j = 0; j < genes.Length; j++)
                 {
-                    if (board[i][j] != 0)
-                        genes[i][j] = board[i][j];
-                    else
+                    genes[i][j] = board[i][j];
+                }
+            }
+            for (int i = 0; i < genes.Length; i++)
+            {
+                for (int j = 0; j < genes.Length; j++)
+                {
+                    if (board[i][j] == 0)
                     {
-                        //TODO
-                        genes[i][j] = random.Next(1, size + 1);
+                        resetDictionary();
+                        for (int y = 0; y < genes.Length; y++)
+                        {
+                            if(genes[i][y] != 0)
+                                numberValues[genes[i][y]]++;
+                        }
+                        int x = random.Next(1, size + 1);
+                        while (numberValues[x] != 0)
+                            x = random.Next(1, size + 1);
+                        genes[i][j] = x;
                     }
                 }
             }
@@ -88,12 +101,9 @@ namespace Killer_Sudoku_2
             int geneLength = (int)Math.Sqrt(genes.Length);
             resetDictionary();
 
-            int x = 0;
-            for (int i = 0; i < genes.Length; i += geneLength)
+            for (int x = 0; x < genes.Length; x += geneLength)
             {
-                int y = 0;
-
-                for (int l = 0; l < geneLength; l++)
+                for (int y = 0; y < genes.Length; y += geneLength)
                 {
                     for (int j = x; j < x + geneLength; j++)
                     {
@@ -102,46 +112,40 @@ namespace Killer_Sudoku_2
                             numberValues[genes[j][k]]++;
                         }
                     }
-
                     fitness += calculatePenalty();
                     resetDictionary();
-
-                    y += 2;
                 }
-
-                x += 2;
             }
 
-            //TODO
-            /*
-            x = 0;
-            for (int i = 0; i < genes.Length; i += geneLength)
+            for (int x = 0; x < geneLength; x++)
             {
-                int y = 0;
-
-                for (int j = x; j < x + geneLength; j++)
+                for (int y = 0; y < geneLength; y++)
                 {
-                    for (int k = y; k < y + geneLength; k++)
+                    for (int j = x; j < x + genes.Length; j += geneLength)
                     {
-                        numberValues[genes[j][k]]++;
+                        for (int k = y; k < y + genes.Length; k += geneLength)
+                        {
+                            numberValues[genes[j][k]]++;
+                        }
                     }
-                    y += 2;
+                    fitness += calculatePenalty();
+                    resetDictionary();
                 }
-
-                fitness += calculatePenalty();
-
-                x += 2;
             }
-            */
+
             return fitness;
         }
-
-        //TODO
         private static double calculatePenalty()
         {
             double penalty = 0;
 
-
+            foreach(var numbers in numberValues)
+            {
+                if (numbers.Value == 0)
+                    penalty++;
+                else
+                    penalty += Math.Abs(numbers.Value - 1);
+            }
 
             return penalty;
         }

@@ -111,7 +111,8 @@ namespace Killer_Sudoku_2
 
                 randomNumber += Population[i].Fitness;
             }
-
+            Console.WriteLine("Pop Count: "+Population.Count);
+            Console.WriteLine("FitnessSum: "+fitnessSum);
             return null;
         }
     }
