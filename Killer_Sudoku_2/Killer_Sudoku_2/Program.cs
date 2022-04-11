@@ -132,7 +132,6 @@ namespace Killer_Sudoku_2
                     resetDictionary();
                 }
             }
-
             return fitness;
         }
         private static double calculatePenalty()
