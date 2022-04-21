@@ -13,21 +13,22 @@ namespace Killer_Sudoku_2
 
         static void Main()
         {
-            size = 4;
+            size = 9;
             random = new Random();
             board = new int[size][];
-            board[0] = new int[] { 1, 0, 0, 0 };
-            board[1] = new int[] { 0, 0, 0, 2 };
-            board[2] = new int[] { 0, 0, 0, 4 };
-            board[3] = new int[] { 3, 0, 0, 0 };
+            board[0] = new int[] { 0, 0, 0, 6, 8, 0, 1, 9, 0 };
+            board[1] = new int[] { 2, 6, 0, 0, 7, 0, 0, 0, 4 };
+            board[2] = new int[] { 7, 0, 1, 0, 9, 0, 5, 0, 0 };
+            board[3] = new int[] { 8, 2, 0, 0, 0, 4, 0, 5, 0 };
+            board[4] = new int[] { 1, 0, 0, 6, 0, 2, 0, 0, 3 };
+            board[5] = new int[] { 0, 4, 0, 9, 0, 0, 0, 2, 8 };
+            board[6] = new int[] { 0, 0, 9, 0, 4, 0, 7, 0, 3 };
+            board[7] = new int[] { 3, 0, 0, 0, 5, 0, 0, 1, 8 };
+            board[8] = new int[] { 0, 7, 4, 0, 3, 6, 0, 0, 0 };
 
             numberValues = new Dictionary<int, int>();
-            for (int i = 0; i < size; i++)
-            {
-                numberValues.Add(i + 1, 0);
-            }
 
-            geneticAlgorithm = new GeneticAlgorithm(21, 4, board, random, getRandomGenes, FitnessFunction);
+            geneticAlgorithm = new GeneticAlgorithm(500, 9, board, random, getRandomGenes, FitnessFunction);
              
             printBoard(board);
 
@@ -39,13 +40,14 @@ namespace Killer_Sudoku_2
                 Console.WriteLine();
                 printBoard(geneticAlgorithm.BestGenes);
                 Console.WriteLine(geneticAlgorithm.BestFitness);
+                if(geneticAlgorithm.Generation == 2000)
+                    geneticAlgorithm = new GeneticAlgorithm(500, 9, board, random, getRandomGenes, FitnessFunction);
             }
 
             Console.WriteLine(geneticAlgorithm.Generation);
             printBoard(geneticAlgorithm.BestGenes);
         }
 
-        //TODO
         private static void printBoard(int[][] board)
         {
             for (int x = 0; x < board.Length; x += (int)Math.Sqrt(size))
@@ -77,7 +79,7 @@ namespace Killer_Sudoku_2
             {
                 for (int j = 0; j < genes.Length; j++)
                 {
-                    if (board[i][j] == 0)
+                    if (genes[i][j] == 0)
                     {
                         resetDictionary();
                         for (int y = 0; y < genes.Length; y++)

@@ -42,7 +42,11 @@ namespace Killer_Sudoku_2
 
             for (int i = 0; i < Genes.Length; i++)
             {
-                child.Genes[i] = random.NextDouble() < 0.5 ? Genes[i] : otherParent.Genes[i];
+                bool first = random.NextDouble() < 0.5;
+                if(first)
+                    Genes[i].CopyTo(child.Genes[i], 0);
+                else
+                    otherParent.Genes[i].CopyTo(child.Genes[i], 0);
             }
 
             return child;

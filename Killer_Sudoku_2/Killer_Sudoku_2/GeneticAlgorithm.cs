@@ -19,7 +19,7 @@ namespace Killer_Sudoku_2
         private double fitnessSum;
 
         public GeneticAlgorithm(int populationSize, int geneSize, int[][] sudoku, Random r, Action<int[][]> getRandomGenes, Func<int, double> fitnessFunction, 
-            int elitism = 1, double mutationRate = 0.6)
+            int elitism = 10, double mutationRate = 0.6)
         {
             Population = new List<Chromosome>(populationSize);
             newPopulation = new List<Chromosome>(populationSize);
@@ -28,6 +28,10 @@ namespace Killer_Sudoku_2
             MutationRate = mutationRate;
             random = r;
             BestGenes = new int[geneSize][];
+            for (int i = 0; i < BestGenes.Length; i++)
+            {
+                BestGenes[i] = new int[geneSize];
+            }
             BestFitness = 1000000;
 
             for (int i = 0; i < populationSize; i++)
@@ -38,9 +42,6 @@ namespace Killer_Sudoku_2
 
         public void NewGeneration()
         {
-            if (Population.Count <= 0)
-                return;
-
             CalculateFitness();
 
             Population.Sort(CompareChromosomes);
@@ -65,10 +66,7 @@ namespace Killer_Sudoku_2
                 }
             }
 
-            List<Chromosome> tmp = Population;
-            Population = newPopulation;
-            newPopulation = tmp;
-
+            (newPopulation, Population) = (Population, newPopulation);
             Generation++;
         }
 
@@ -90,29 +88,33 @@ namespace Killer_Sudoku_2
 
             for (int i = 0; i < Population.Count; i++)
             {
-                fitnessSum -= Population[i].CalculateFitness(i);
+                fitnessSum += Population[i].CalculateFitness(i);
 
                 if (Population[i].Fitness < best.Fitness)
                     best = Population[i];
             }
 
             BestFitness = best.Fitness;
-            best.Genes.CopyTo(BestGenes, 0);
+            for (int i = 0; i < BestGenes.Length; i++)
+            {
+                best.Genes[i].CopyTo(BestGenes[i], 0);
+            }
         }
 
         private Chromosome chooseParent()
         {
             double randomNumber = random.NextDouble() * fitnessSum;
 
+            int j = Population.Count - 1;
             for (int i = 0; i < Population.Count; i++)
             {
-                if (randomNumber < Population[i].Fitness)
+                if (randomNumber < Population[j].Fitness)
                     return Population[i];
 
-                randomNumber += Population[i].Fitness;
+                randomNumber -= Population[j].Fitness;
+
+                j--;
             }
-            Console.WriteLine("Pop Count: "+Population.Count);
-            Console.WriteLine("FitnessSum: "+fitnessSum);
             return null;
         }
     }
