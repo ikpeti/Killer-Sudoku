@@ -8,11 +8,11 @@ namespace Killer_Sudoku_2
     {
         public int[][] Genes { get; private set; }
         public int[][] SudokuProblem { get; private set; }
-        public double Fitness { get; private set; }
-        private Random random;
-        private Action<int[][]> getRandomGenes;
-        private Func<int, double> fitnessFunction;
-        public Chromosome(int size, int[][] sudoku, Random r, Action<int[][]> getRandomGenes, Func<int, double> fitnessFunction, bool firstTime = true)
+        public double Fitness { get; set; }
+        private readonly Random random;
+        private readonly Action<int[][]> getRandomGenes;
+        private readonly Func<int, int> fitnessFunction;
+        public Chromosome(int size, int[][] sudoku, Random r, Action<int[][]> getRandomGenes, Func<int, int> fitnessFunction, bool firstTime = true)
         {
             Genes = new int[size][];
             for (int i = 0; i < size; i++)
@@ -21,6 +21,7 @@ namespace Killer_Sudoku_2
             }
             SudokuProblem = sudoku;
             random = r;
+            Fitness = 0;
             this.getRandomGenes = getRandomGenes;
             this.fitnessFunction = fitnessFunction;
 
@@ -30,10 +31,9 @@ namespace Killer_Sudoku_2
             }
         }
 
-        public double CalculateFitness(int index)
-        {
+        public void CalculateFitness(int index)
+        {                
             Fitness = fitnessFunction(index);
-            return Fitness;
         }
 
         public Chromosome Crossover(Chromosome otherParent)
@@ -54,8 +54,6 @@ namespace Killer_Sudoku_2
 
         public void Mutate(double mutationRate)
         {
-            int[][] indexes = new int[Genes.Length][];
-
             for (int i = 0; i < Genes.Length; i++)
             {
                 if (random.NextDouble() < mutationRate)
@@ -63,22 +61,8 @@ namespace Killer_Sudoku_2
                     int a = random.Next(0, Genes.Length);
                     int b = random.Next(0, Genes.Length);
 
-                    if (SudokuProblem[i][a] != 0 || SudokuProblem[i][b] != 0)
-                        return;
-
-                    indexes[i] = new int[] { a, b };
-                }
-                else
-                    indexes[i] = new int[] { 0 };
-            }
-
-            for (int i = 0; i < Genes.Length; i++)
-            {
-                if(indexes[i][0] != 0)
-                {
-                    int tmp = Genes[i][indexes[i][0]];
-                    Genes[i][indexes[i][0]] = Genes[i][indexes[i][1]];
-                    Genes[i][indexes[i][1]] = tmp;
+                    if (SudokuProblem[i][a] == 0 && SudokuProblem[i][b] == 0)
+                        (Genes[i][b], Genes[i][a]) = (Genes[i][a], Genes[i][b]);
                 }
             }
         }

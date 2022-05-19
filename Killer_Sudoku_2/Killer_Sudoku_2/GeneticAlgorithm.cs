@@ -15,11 +15,10 @@ namespace Killer_Sudoku_2
         public double MutationRate;
 
         private List<Chromosome> newPopulation;
-        private Random random;
-        private double fitnessSum;
+        private readonly Random random;
 
-        public GeneticAlgorithm(int populationSize, int geneSize, int[][] sudoku, Random r, Action<int[][]> getRandomGenes, Func<int, double> fitnessFunction, 
-            int elitism = 10, double mutationRate = 0.6)
+        public GeneticAlgorithm(int populationSize, int geneSize, int[][] sudoku, Random r, Action<int[][]> getRandomGenes, Func<int, int> fitnessFunction, 
+            int elitism = 100, double mutationRate = 0.1)
         {
             Population = new List<Chromosome>(populationSize);
             newPopulation = new List<Chromosome>(populationSize);
@@ -47,27 +46,27 @@ namespace Killer_Sudoku_2
             Population.Sort(CompareChromosomes);
             newPopulation.Clear();
 
-            for (int i = 0; i < Population.Count; i++)
+            for (int i = 0; i < Elitism; i++)
             {
-                if (i < Elitism)
-                {
-                    newPopulation.Add(Population[i]);
-                }
-                else
-                {
-                    Chromosome parent1 = chooseParent();
-                    Chromosome parent2 = chooseParent();
+                newPopulation.Add(Population[i]);
+            }
 
-                    Chromosome child = parent1.Crossover(parent2);
+            for (int i = Population.Count - 1; i >= Elitism; i--)
+            {
+                Chromosome parent1 = ChooseParent(i);
+                Chromosome parent2 = ChooseParent(i);
 
-                    child.Mutate(MutationRate);
+                Chromosome child = parent1.Crossover(parent2);
 
-                    newPopulation.Add(child);
-                }
+                child.Mutate(MutationRate);
+
+                newPopulation.Add(child);
             }
 
             (newPopulation, Population) = (Population, newPopulation);
             Generation++;
+            if (Generation == 100)
+                MutationRate = 0.9;
         }
 
         public int CompareChromosomes(Chromosome a, Chromosome b)
@@ -82,13 +81,11 @@ namespace Killer_Sudoku_2
 
         public void CalculateFitness()
         {
-            fitnessSum = 0;
-
             Chromosome best = Population[0];
 
             for (int i = 0; i < Population.Count; i++)
             {
-                fitnessSum += Population[i].CalculateFitness(i);
+                Population[i].CalculateFitness(i);
 
                 if (Population[i].Fitness < best.Fitness)
                     best = Population[i];
@@ -101,21 +98,10 @@ namespace Killer_Sudoku_2
             }
         }
 
-        private Chromosome chooseParent()
+        private Chromosome ChooseParent(int i)
         {
-            double randomNumber = random.NextDouble() * fitnessSum;
-
-            int j = Population.Count - 1;
-            for (int i = 0; i < Population.Count; i++)
-            {
-                if (randomNumber < Population[j].Fitness)
-                    return Population[i];
-
-                randomNumber -= Population[j].Fitness;
-
-                j--;
-            }
-            return null;
+            int x = (int) (i * random.NextDouble());
+            return Population[x];
         }
     }
 }
