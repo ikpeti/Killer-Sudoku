@@ -1,0 +1,15 @@
+U:\Sudoku\BasicSolver\BasicSolver\bin\Debug\net6.0\BasicSolver.exe
+U:\Sudoku\BasicSolver\BasicSolver\bin\Debug\net6.0\BasicSolver.deps.json
+U:\Sudoku\BasicSolver\BasicSolver\bin\Debug\net6.0\BasicSolver.runtimeconfig.json
+U:\Sudoku\BasicSolver\BasicSolver\bin\Debug\net6.0\BasicSolver.dll
+U:\Sudoku\BasicSolver\BasicSolver\bin\Debug\net6.0\BasicSolver.pdb
+U:\Sudoku\BasicSolver\BasicSolver\obj\Debug\net6.0\BasicSolver.csproj.AssemblyReference.cache
+U:\Sudoku\BasicSolver\BasicSolver\obj\Debug\net6.0\BasicSolver.GeneratedMSBuildEditorConfig.editorconfig
+U:\Sudoku\BasicSolver\BasicSolver\obj\Debug\net6.0\BasicSolver.AssemblyInfoInputs.cache
+U:\Sudoku\BasicSolver\BasicSolver\obj\Debug\net6.0\BasicSolver.AssemblyInfo.cs
+U:\Sudoku\BasicSolver\BasicSolver\obj\Debug\net6.0\BasicSolver.csproj.CoreCompileInputs.cache
+U:\Sudoku\BasicSolver\BasicSolver\obj\Debug\net6.0\BasicSolver.dll
+U:\Sudoku\BasicSolver\BasicSolver\obj\Debug\net6.0\refint\BasicSolver.dll
+U:\Sudoku\BasicSolver\BasicSolver\obj\Debug\net6.0\BasicSolver.pdb
+U:\Sudoku\BasicSolver\BasicSolver\obj\Debug\net6.0\BasicSolver.genruntimeconfig.cache
+U:\Sudoku\BasicSolver\BasicSolver\obj\Debug\net6.0\ref\BasicSolver.dll
