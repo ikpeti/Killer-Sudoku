@@ -17,12 +17,12 @@ namespace Killer_Sudoku_2
         {
             size = 9;
             random = new Random();
-            testN = 6;
+            testN = 2;
             InitTest(testN);
 
             numberValues = new Dictionary<int, int>();
 
-            geneticAlgorithm = new GeneticAlgorithm(10000, 9, testPuzzles[testN], random, GetRandomGenes, KillerFitness);
+            geneticAlgorithm = new GeneticAlgorithm(1000, 9, testPuzzles[testN], random, GetRandomGenes, KillerFitness);
              
             PrintBoard(testPuzzles[testN]);
 

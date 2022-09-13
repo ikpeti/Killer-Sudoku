@@ -18,7 +18,7 @@ namespace Killer_Sudoku_2
         private readonly Random random;
 
         public GeneticAlgorithm(int populationSize, int geneSize, int[][] sudoku, Random r, Action<int[][]> getRandomGenes, Func<int, int> fitnessFunction, 
-            int elitism = 100, double mutationRate = 0.1)
+            int elitism = 10, double mutationRate = 0.1)
         {
             Population = new List<Chromosome>(populationSize);
             newPopulation = new List<Chromosome>(populationSize);
@@ -53,8 +53,8 @@ namespace Killer_Sudoku_2
 
             for (int i = Population.Count - 1; i >= Elitism; i--)
             {
-                Chromosome parent1 = ChooseParent(i);
-                Chromosome parent2 = ChooseParent(i);
+                Chromosome parent1 = Selection(i);
+                Chromosome parent2 = Selection(i);
 
                 Chromosome child = parent1.Crossover(parent2);
 
@@ -98,7 +98,7 @@ namespace Killer_Sudoku_2
             }
         }
 
-        private Chromosome ChooseParent(int i)
+        private Chromosome Selection(int i)
         {
             int x = (int) (i * random.NextDouble());
             return Population[x];
