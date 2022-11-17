@@ -12,4 +12,6 @@ public interface ISudokuBoard
     public void Init(int[,] board);
     public void Print();
     public bool Solve();
+    public int CheckGeneratedPuzzle();
+    public void Generate(SudokuTypes sudokuType);
 }
