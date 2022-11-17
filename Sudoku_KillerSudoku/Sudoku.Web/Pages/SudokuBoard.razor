@@ -1,0 +1,149 @@
+﻿@page "/sudokuboard"
+
+@inject ISudokuService sudokuService;
+<link href="css/app.css" rel="stylesheet" />
+<h1>Sudoku</h1>
+<h2 id="errors">@errors</h2>
+<br />
+<div id="board">
+    @if(board != null){
+    @for(int i = 0; i < 9; i++)
+    {
+        @for(int j = 0; j < 9; j++)
+        {
+            int k = i;
+            int l = j;
+            int number = -board[i, j];
+            @if((i == 2 || i == 5) && (j == 2 || j == 5))
+            {
+                @if (board[i, j] == 0)
+                {
+                    <div id="@i.ToString() + - + @j.ToString()" class="horizontal-line vertical-line tile" @onclick="() => SelectTile(k, l)"/>
+                }
+                else if(board[i, j] > 0)
+                {
+                    <div id="@i.ToString() + - + @j.ToString()" class="horizontal-line vertical-line tile tile-start" @onclick="() => SelectTile(k, l)">@board[i, j]</div>
+                }
+                else
+                {
+                    <div id="@i.ToString() + - + @j.ToString()" class="horizontal-line vertical-line tile" @onclick="() => SelectTile(k, l)">@number</div>
+                }
+            }
+            else @if(i == 2 || i == 5)
+            {
+                @if (board[i, j] == 0)
+                {
+                    <div id="@i.ToString() + - + @j.ToString()" class="horizontal-line tile" @onclick="() => SelectTile(k, l)"/>
+                }
+                else if(board[i, j] > 0)
+                {
+                    <div id="@i.ToString() + - + @j.ToString()" class="horizontal-line tile tile-start" @onclick="() => SelectTile(k, l)">@board[i, j]</div>
+                }
+                else
+                {
+                    <div id="@i.ToString() + - + @j.ToString()" class="horizontal-line tile" @onclick="() => SelectTile(k, l)">@number</div>
+                }
+            }
+            else @if(j == 2 || j == 5)
+            {
+                @if (board[i, j] == 0)
+                {
+                    <div id="@i.ToString() + - + @j.ToString()" class="vertical-line tile" @onclick="() => SelectTile(k, l)"/>
+                }
+                else if(board[i, j] > 0)
+                {
+                    <div id="@i.ToString() + - + @j.ToString()" class="vertical-line tile tile-start" @onclick="() => SelectTile(k, l)">@board[i, j]</div>
+                }
+                else
+                {
+                    <div id="@i.ToString() + - + @j.ToString()" class="vertical-line tile" @onclick="() => SelectTile(k, l)">@number</div>
+                }
+            }
+            else
+            {
+                @if (board[i, j] == 0)
+                {
+                    <div id="@i.ToString() + - + @j.ToString()" class="tile" @onclick="() => SelectTile(k, l)"/>
+                }
+                else if(board[i, j] > 0)
+                {
+                    <div id="@i.ToString() + - + @j.ToString()" class="tile tile-start" @onclick="() => SelectTile(k, l)">@board[i, j]</div>
+                }
+                else
+                {
+                    <div id="@i.ToString() + - + @j.ToString()" class="tile" @onclick="() => SelectTile(k, l)">@number</div>
+                }
+            }
+        }
+    }}
+</div>
+<br/>
+<div id="digits">
+    @for(int i = 1; i <= 9; i++)
+    {
+        int k = i;
+        @if(i == @numberSelected)
+        {
+            <div id="@i" class="number number-selected" @onclick="() => SelectNumber(k)">@i</div>
+        }else
+        {
+            <div id="@i" class="number" @onclick="() => SelectNumber(k)">@i</div>
+        }
+    }
+</div>
+
+@code {
+    int numberSelected = 0;
+
+    int errors = 0;
+    int[,]? board;
+    int[,]? solution;
+
+    public void SelectNumber(int i)
+    {
+        numberSelected = i;
+    }
+
+    public void SelectTile(int i, int j)
+    {
+        if(numberSelected != 0 && board[i, j] == 0)
+        {
+            if (numberSelected == solution[i, j])
+            {
+                board[i, j] = -numberSelected;
+            }
+            else
+            {
+                errors++;
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var viewModel = await sudokuService.GetSudoku();
+        board = new int[viewModel.Size, viewModel.Size];
+        solution = new int[viewModel.Size, viewModel.Size];
+        int z = 0;
+        for(int i = 0; i < viewModel.Size; i++)
+        {
+            for(int j = 0; j < viewModel.Size; j++)
+            {
+                board[i, j] = viewModel.Board[z];
+                z++;
+            }
+        }
+
+        z = 0;
+        for(int i = 0; i < viewModel.Size; i++)
+        {
+            for(int j = 0; j < viewModel.Size; j++)
+            {
+                solution[i, j] = viewModel.Solution[z];
+                z++;
+            }
+        }
+        
+    }
+}
+
