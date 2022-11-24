@@ -17,23 +17,24 @@ namespace Killer_Sudoku_2
         {
             size = 9;
             random = new Random();
-            testN = 2;
+            testN = 0;
             InitTest(testN);
 
             numberValues = new Dictionary<int, int>();
 
-            geneticAlgorithm = new GeneticAlgorithm(1000, 9, testPuzzles[testN], random, GetRandomGenes, KillerFitness);
-             
+            SudokuConstants.SudokuProblem = testPuzzles[testN];
+            geneticAlgorithm = new GeneticAlgorithm(1000, 9, random, GetRandomGenes, KillerFitness);
+
             PrintBoard(testPuzzles[testN]);
 
             while (geneticAlgorithm.BestFitness != 0)
             {
                 geneticAlgorithm.NewGeneration();
-                Console.Write(geneticAlgorithm.Generation+", ");
-                Console.Write(geneticAlgorithm.Population.Count+", ");
-                Console.WriteLine();
-                PrintBoard(geneticAlgorithm.BestGenes);
-                Console.WriteLine(geneticAlgorithm.BestFitness);
+                //Console.Write(geneticAlgorithm.Generation + ", ");
+                //Console.Write(geneticAlgorithm.Population.Count + ", ");
+                //Console.WriteLine();
+                //PrintBoard(geneticAlgorithm.BestGenes);
+                //Console.WriteLine(geneticAlgorithm.BestFitness);
                 /*if(geneticAlgorithm.Generation == 500)
                     geneticAlgorithm = new GeneticAlgorithm(1000, 9, testPuzzles[testN], random, getRandomGenes, FitnessFunction);*/
             }
@@ -80,7 +81,7 @@ namespace Killer_Sudoku_2
                         ResetDictionary();
                         for (int y = 0; y < genes.Length; y++)
                         {
-                            if(genes[i][y] != 0)
+                            if (genes[i][y] != 0)
                                 numberValues[genes[i][y]]++;
                         }
                         int x = random.Next(1, size + 1);
@@ -142,7 +143,7 @@ namespace Killer_Sudoku_2
         {
             int penalty = 0;
 
-            foreach(var numbers in numberValues)
+            foreach (var numbers in numberValues)
             {
                 if (numbers.Value == 0)
                     penalty++;
@@ -184,7 +185,8 @@ namespace Killer_Sudoku_2
                         testPuzzles[0][6] = new int[] { 0, 0, 0, 8, 0, 5, 7, 3, 4 };
                         testPuzzles[0][7] = new int[] { 4, 0, 0, 0, 6, 0, 0, 0, 8 };
                         testPuzzles[0][8] = new int[] { 0, 0, 0, 0, 2, 0, 5, 0, 0 };
-                    }break;
+                    }
+                    break;
                 case 1:
                     {
                         //MEDIUM
@@ -197,7 +199,8 @@ namespace Killer_Sudoku_2
                         testPuzzles[1][6] = new int[] { 0, 0, 2, 7, 3, 0, 8, 1, 0 };
                         testPuzzles[1][7] = new int[] { 3, 0, 0, 5, 0, 0, 0, 2, 9 };
                         testPuzzles[1][8] = new int[] { 4, 1, 0, 9, 0, 8, 0, 0, 0 };
-                    } break;
+                    }
+                    break;
                 case 2:
                     {
                         //HARD
@@ -210,7 +213,8 @@ namespace Killer_Sudoku_2
                         testPuzzles[2][6] = new int[] { 0, 0, 3, 0, 7, 0, 9, 6, 0 };
                         testPuzzles[2][7] = new int[] { 0, 0, 7, 9, 0, 0, 0, 0, 0 };
                         testPuzzles[2][8] = new int[] { 2, 0, 0, 1, 0, 0, 0, 0, 0 };
-                    } break;
+                    }
+                    break;
                 case 3:
                     {
                         //easy killer
@@ -223,48 +227,49 @@ namespace Killer_Sudoku_2
                         testPuzzles[3][6] = new int[] { 0, 8, 4, 0, 0, 0, 0, 1, 5 };
                         testPuzzles[3][7] = new int[] { 9, 6, 0, 0, 0, 0, 0, 0, 0 };
                         testPuzzles[3][8] = new int[] { 0, 3, 7, 0, 0, 2, 0, 0, 0 };
-                        killerValues.Add(new int[5][] { new int[2] { 0, 0 }, new int[2] { 0, 1 }, 
+                        killerValues.Add(new int[5][] { new int[2] { 0, 0 }, new int[2] { 0, 1 },
                             new int[2] { 0, 2 }, new int[2] { 0, 3 }, new int[2] { 0, 5 } }, 22);
-                        killerValues.Add(new int[5][] { new int[2] { 0, 4 }, new int[2] { 0, 7 }, 
+                        killerValues.Add(new int[5][] { new int[2] { 0, 4 }, new int[2] { 0, 7 },
                             new int[2] { 0, 8 }, new int[2] { 1, 6 }, new int[2] { 3, 2 } }, 27);
                         killerValues.Add(new int[2][] { new int[2] { 0, 6 }, new int[2] { 3, 0 } }, 7);
                         killerValues.Add(new int[2][] { new int[2] { 1, 0 }, new int[2] { 1, 1 } }, 10);
                         killerValues.Add(new int[2][] { new int[2] { 1, 3 }, new int[2] { 1, 4 } }, 9);
-                        killerValues.Add(new int[3][] { new int[2] { 1, 2 }, new int[2] { 2, 0 }, 
+                        killerValues.Add(new int[3][] { new int[2] { 1, 2 }, new int[2] { 2, 0 },
                             new int[2] { 2, 3 } }, 17);
-                        killerValues.Add(new int[4][] { new int[2] { 1, 5 }, new int[2] { 1, 7 }, 
+                        killerValues.Add(new int[4][] { new int[2] { 1, 5 }, new int[2] { 1, 7 },
                             new int[2] { 1, 8 }, new int[2] { 4, 2 } }, 17);
-                        killerValues.Add(new int[4][] { new int[2] { 2, 1 }, new int[2] { 2, 2 }, 
+                        killerValues.Add(new int[4][] { new int[2] { 2, 1 }, new int[2] { 2, 2 },
                             new int[2] { 2, 4 }, new int[2] { 2, 5 } }, 19);
                         killerValues.Add(new int[2][] { new int[2] { 2, 7 }, new int[2] { 2, 8 } }, 10);
-                        killerValues.Add(new int[5][] { new int[2] { 2, 6 }, new int[2] { 5, 0 }, 
+                        killerValues.Add(new int[5][] { new int[2] { 2, 6 }, new int[2] { 5, 0 },
                             new int[2] { 5, 1 }, new int[2] { 5, 3 }, new int[2] { 5, 4 } }, 29);
-                        killerValues.Add(new int[5][] { new int[2] { 3, 1 }, new int[2] { 3, 3 }, 
+                        killerValues.Add(new int[5][] { new int[2] { 3, 1 }, new int[2] { 3, 3 },
                             new int[2] { 3, 4 }, new int[2] { 3, 6 }, new int[2] { 3, 7 } }, 23);
-                        killerValues.Add(new int[6][] { new int[2] { 3, 5 }, new int[2] { 3, 8 }, 
-                            new int[2] { 4, 3 }, new int[2] { 4, 4 }, new int[2] { 4, 6 }, 
+                        killerValues.Add(new int[6][] { new int[2] { 3, 5 }, new int[2] { 3, 8 },
+                            new int[2] { 4, 3 }, new int[2] { 4, 4 }, new int[2] { 4, 6 },
                             new int[2] { 4, 7 } }, 30);
                         killerValues.Add(new int[2][] { new int[2] { 4, 0 }, new int[2] { 4, 1 } }, 13);
-                        killerValues.Add(new int[4][] { new int[2] { 4, 5 }, new int[2] { 4, 8 }, 
+                        killerValues.Add(new int[4][] { new int[2] { 4, 5 }, new int[2] { 4, 8 },
                             new int[2] { 5, 6 }, new int[2] { 7, 2 } }, 18);
                         killerValues.Add(new int[2][] { new int[2] { 5, 2 }, new int[2] { 5, 5 } }, 13);
                         killerValues.Add(new int[2][] { new int[2] { 5, 7 }, new int[2] { 5, 8 } }, 7);
-                        killerValues.Add(new int[3][] { new int[2] { 6, 0 }, new int[2] { 6, 3 }, 
+                        killerValues.Add(new int[3][] { new int[2] { 6, 0 }, new int[2] { 6, 3 },
                             new int[2] { 6, 4 } }, 11);
-                        killerValues.Add(new int[3][] { new int[2] { 6, 1 }, new int[2] { 6, 2 }, 
+                        killerValues.Add(new int[3][] { new int[2] { 6, 1 }, new int[2] { 6, 2 },
                             new int[2] { 6, 5 } }, 21);
                         killerValues.Add(new int[2][] { new int[2] { 6, 6 }, new int[2] { 6, 7 } }, 8);
-                        killerValues.Add(new int[3][] { new int[2] { 6, 8 }, new int[2] { 7, 6 }, 
+                        killerValues.Add(new int[3][] { new int[2] { 6, 8 }, new int[2] { 7, 6 },
                             new int[2] { 7, 7 } }, 15);
                         killerValues.Add(new int[2][] { new int[2] { 7, 0 }, new int[2] { 7, 3 } }, 14);
-                        killerValues.Add(new int[3][] { new int[2] { 7, 1 }, new int[2] { 7, 4 }, 
+                        killerValues.Add(new int[3][] { new int[2] { 7, 1 }, new int[2] { 7, 4 },
                             new int[2] { 7, 5 } }, 17);
-                        killerValues.Add(new int[4][] { new int[2] { 7, 8 }, new int[2] { 8, 3 }, 
+                        killerValues.Add(new int[4][] { new int[2] { 7, 8 }, new int[2] { 8, 3 },
                             new int[2] { 8, 6 }, new int[2] { 8, 7 } }, 19);
-                        killerValues.Add(new int[6][] { new int[2] { 8, 0 }, new int[2] { 8, 1 }, 
-                            new int[2] { 8, 2 }, new int[2] { 8, 4 }, new int[2] { 8, 5 }, 
+                        killerValues.Add(new int[6][] { new int[2] { 8, 0 }, new int[2] { 8, 1 },
+                            new int[2] { 8, 2 }, new int[2] { 8, 4 }, new int[2] { 8, 5 },
                             new int[2] { 8, 8 } }, 29);
-                    } break;
+                    }
+                    break;
                 case 4:
                     {
                         //medium killer
@@ -278,7 +283,7 @@ namespace Killer_Sudoku_2
                         testPuzzles[4][7] = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                         testPuzzles[4][8] = new int[] { 4, 0, 0, 0, 7, 1, 0, 0, 0 };
                         killerValues.Add(new int[2][] { new int[2] { 0, 0 }, new int[2] { 0, 3 } }, 15);
-                        killerValues.Add(new int[3][] { new int[2] { 0, 1 }, new int[2] { 0, 2 }, 
+                        killerValues.Add(new int[3][] { new int[2] { 0, 1 }, new int[2] { 0, 2 },
                             new int[2] { 0, 4 } }, 11);
                         killerValues.Add(new int[3][] { new int[2] { 0, 6 }, new int[2] { 3, 0 },
                             new int[2] { 3, 3 } }, 17);
@@ -434,7 +439,7 @@ namespace Killer_Sudoku_2
                         killerValues.Add(new int[2][] { new int[2] { 8, 6 }, new int[2] { 8, 7 } }, 17);
                     }
                     break;
-            }           
+            }
         }
 
         private static int KillerFitness(int index)
@@ -442,7 +447,7 @@ namespace Killer_Sudoku_2
             int fitness = 0;
             fitness += FitnessFunction(index);
             int[][] genes = geneticAlgorithm.Population[index].Genes;
-            foreach(var kv in killerValues)
+            foreach (var kv in killerValues)
             {
                 int sum = 0;
                 for (int i = 0; i < kv.Key.Length; i++)

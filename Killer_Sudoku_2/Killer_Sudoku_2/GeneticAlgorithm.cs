@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Killer_Sudoku_2
 {
@@ -17,7 +16,7 @@ namespace Killer_Sudoku_2
         private List<Chromosome> newPopulation;
         private readonly Random random;
 
-        public GeneticAlgorithm(int populationSize, int geneSize, int[][] sudoku, Random r, Action<int[][]> getRandomGenes, Func<int, int> fitnessFunction, 
+        public GeneticAlgorithm(int populationSize, int geneSize, Random r, Action<int[][]> getRandomGenes, Func<int, int> fitnessFunction,
             int elitism = 10, double mutationRate = 0.1)
         {
             Population = new List<Chromosome>(populationSize);
@@ -35,7 +34,7 @@ namespace Killer_Sudoku_2
 
             for (int i = 0; i < populationSize; i++)
             {
-                Population.Add(new Chromosome(geneSize, sudoku, r, getRandomGenes, fitnessFunction, firstTime : true));
+                Population.Add(new Chromosome(geneSize, r, getRandomGenes, fitnessFunction, firstTime: true));
             }
         }
 
@@ -100,7 +99,7 @@ namespace Killer_Sudoku_2
 
         private Chromosome Selection(int i)
         {
-            int x = (int) (i * random.NextDouble());
+            int x = (int)(i * random.NextDouble());
             return Population[x];
         }
     }

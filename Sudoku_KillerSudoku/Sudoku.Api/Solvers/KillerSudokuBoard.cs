@@ -3,19 +3,19 @@
 namespace Sudoku.Api.Solvers;
 public class KillerSudokuBoard : SudokuBoard
 {
-    private SortedList<List<Coordinate>, int> _killerValues;
-    //private SortedDictionary<List<Coordinate>, int> _killerPoints;
-    IOrderedEnumerable<KeyValuePair<List<Coordinate>, int>> _killer;
+    private Dictionary<List<Coordinate>, int> _killerValues;
+    private SortedList<List<Coordinate>, int> _killerValuesSorted;
     public KillerSudokuBoard()
     {
-        _killerValues = new SortedList<List<Coordinate>, int>();
+        _killerValues = new Dictionary<List<Coordinate>, int>();
+        _killerValuesSorted = new SortedList<List<Coordinate>, int>(new KillerComparer());
 
-        _killerValues.Add(new List<Coordinate> 
-        { 
-            new Coordinate 
-                { X = 0, Y = 0 }, 
-            new Coordinate 
-                { X = 1, Y = 0 } 
+        _killerValues.Add(new List<Coordinate>
+        {
+            new Coordinate
+                { X = 0, Y = 0 },
+            new Coordinate
+                { X = 1, Y = 0 }
         }, 12);
         _killerValues.Add(new List<Coordinate>
         {
@@ -260,7 +260,10 @@ public class KillerSudokuBoard : SudokuBoard
                 { X = 8, Y = 8 }
         }, 3);
 
-        _killer = from entry in _killerValues orderby entry.Key ascending select entry;
+        foreach (var item in _killerValues)
+        {
+            _killerValuesSorted.Add(item.Key, item.Value);
+        }
     }
 
     protected override bool IsValidNumber(int number, int row, int column, int[,] board)
@@ -268,10 +271,10 @@ public class KillerSudokuBoard : SudokuBoard
         if (!base.IsValidNumber(number, row, column, board))
             return false;
 
-        foreach(var key in _killerValues.Keys)
+        foreach (var key in _killerValues.Keys)
         {
             bool inThisKey = false;
-            foreach(var coordinate in key)
+            foreach (var coordinate in key)
             {
                 if (coordinate.Equals(row, column))
                 {
@@ -283,8 +286,8 @@ public class KillerSudokuBoard : SudokuBoard
             {
                 int sum = 0;
                 int countOfEmpty = 0;
-                List<int> availableNumbers = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9};
-                foreach(var coordinate in key)
+                List<int> availableNumbers = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+                foreach (var coordinate in key)
                 {
                     if (coordinate.Equals(row, column))
                     {
@@ -333,12 +336,12 @@ public class KillerSudokuBoard : SudokuBoard
 
     public bool KillerSolve()
     {
-        foreach(var key in _killerValues.Keys)
+        foreach (var key in _killerValuesSorted.Keys)
         {
             int sum = 0;
             int count = key.Count;
             List<int> availableNumbers = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-            foreach(var coordinate in key)
+            foreach (var coordinate in key)
             {
                 if (Board[coordinate.X, coordinate.Y] == 0)
                 {
