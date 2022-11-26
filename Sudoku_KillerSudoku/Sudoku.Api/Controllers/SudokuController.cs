@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Sudoku.Api.Generators;
 using Sudoku.Api.Solvers;
+using Sudoku.Api.Tests;
 using Sudoku.Models.ViewModels;
 
 namespace Sudoku.Api.Controllers
@@ -22,7 +22,7 @@ namespace Sudoku.Api.Controllers
         {
             var sudokuBoard = _generator.Generate();
             var solution = sudokuBoard;
-            
+
             var boardList = new List<int>();
             for (int i = 0; i < sudokuBoard.Size; i++)
             {
@@ -78,6 +78,16 @@ namespace Sudoku.Api.Controllers
                 }
             }
             return Task.FromResult(new List<int>(solutionList));
+        }
+
+        [HttpGet("/othersudoku")]
+        public Task<List<int>> OtherSudokuSolver()
+        {
+            var sudoku = new NewSolver(9, SudokuExamples.Graduate);
+            sudoku.Print();
+            sudoku.Solve();
+            sudoku.Print();
+            return Task.FromResult(sudoku.GetSolution());
         }
     }
 }
