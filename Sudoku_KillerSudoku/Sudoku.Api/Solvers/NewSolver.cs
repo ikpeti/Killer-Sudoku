@@ -35,14 +35,13 @@ public class NewSolver
     public bool Solve()
     {
         bool finished = false;
-        ReduceLists(Fields);
+        var solvedFields = new List<Field>(Fields);
         while (!finished)
         {
-            var solvedFields = NewSolvedFields();
-            if (solvedFields.Count == 0)
-                finished = true;
+            if (ReduceLists(solvedFields) || ReduceOtherRule())
+                solvedFields = NewSolvedFields();
             else
-                ReduceLists(solvedFields);
+                finished = true;
         }
 
         foreach (var field in Fields)
@@ -53,37 +52,58 @@ public class NewSolver
         return true;
     }
 
-    private void ReduceLists(List<Field> FinishedFields)
+    private bool ReduceLists(List<Field> FinishedFields)
     {
+        var result = false;
         foreach (var field in FinishedFields)
         {
             if (field.Value == 0)
                 continue;
-            ReducePossibleFieldsListByNumber(field);
+            if (ReducePossibleFieldsListByNumber(field))
+                result = true;
         }
+
+        return result;
     }
 
-    private void ReduceOtherRule()
+    private bool ReduceOtherRule()
     {
         for (int i = 0; i < Size; i++)
         {
-            ReduceRow(i);
-            ReduceColumn(i);
-            ReduceBox(i);
+            if (FindSingleElement(i, (x, y) => y.Coordinate.X == x) ||
+            FindSingleElement(i, (x, y) => y.Coordinate.Y == x) ||
+            FindSingleElement(i, (x, y) => BoxNumber(y) == x))
+            {
+                return true;
+            }
         }
+        return false;
     }
 
-    private void ReduceRow(int i)
+    private bool FindSingleElement(int i, Func<int, Field, bool> pred)
     {
         var possibleNumbers = new List<int>();
         foreach (var field in Fields)
         {
-            if (field.Coordinate.X == i && field.Value == 0)
+            if (pred(i, field) && field.Value == 0)
             {
                 possibleNumbers.AddRange(field.PossibleValues);
             }
         }
 
+        int num = GetSingleElement(possibleNumbers);
+
+        if (num != 0)
+        {
+            ReduceOtherRuleOnePossibleElement(i, num, pred);
+            return true;
+        }
+
+        return false;
+    }
+
+    private int GetSingleElement(List<int> possibleNumbers)
+    {
         var g = possibleNumbers.GroupBy(i => i);
 
         int num = 0;
@@ -93,14 +113,16 @@ public class NewSolver
                 num = grp.Key;
         }
 
-        if (num != 0)
+        return num;
+    }
+
+    private void ReduceOtherRuleOnePossibleElement(int i, int num, Func<int, Field, bool> pred)
+    {
+        foreach (var field in Fields)
         {
-            foreach (var field in Fields)
+            if (pred(i, field) && field.Value == 0 && field.PossibleValues.Contains(num))
             {
-                if (field.Coordinate.X == i && field.Value == 0 && field.PossibleValues.Contains(num))
-                {
-                    field.ReduceValues(num);
-                }
+                field.KeepValue(num);
             }
         }
     }
@@ -119,17 +141,21 @@ public class NewSolver
         return result;
     }
 
-    private void ReducePossibleFieldsListByNumber(Field f)
+    private bool ReducePossibleFieldsListByNumber(Field f)
     {
+        var result = false;
         foreach (var field in Fields)
         {
             if (field == f)
                 continue;
             if (IsInRow(f, field) || IsInColumn(f, field) || IsInBox(f, field))
             {
-                field.ReduceValues(f.Value);
+                field.RemoveValue(f.Value);
+                result = true;
             }
         }
+
+        return result;
     }
 
     private bool IsInRow(Field f1, Field f2)

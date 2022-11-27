@@ -19,9 +19,15 @@ public class Field
         }
     }
 
-    public void ReduceValues(int value)
+    public void RemoveValue(int value)
     {
         PossibleValues.Remove(value);
+    }
+
+    public void KeepValue(int value)
+    {
+        if (PossibleValues.Contains(value))
+            PossibleValues.RemoveAll(x => x != value);
     }
 
     public void SetValue()

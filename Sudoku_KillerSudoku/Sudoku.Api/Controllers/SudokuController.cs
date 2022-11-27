@@ -83,7 +83,7 @@ namespace Sudoku.Api.Controllers
         [HttpGet("/othersudoku")]
         public Task<List<int>> OtherSudokuSolver()
         {
-            var sudoku = new NewSolver(9, SudokuExamples.Graduate);
+            var sudoku = new NewSolver(9, SudokuExamples.Extreme);
             sudoku.Print();
             sudoku.Solve();
             sudoku.Print();
