@@ -34,6 +34,7 @@ public class NewSolver
 
     public bool Solve()
     {
+        InitialReducing();
         bool finished = false;
         var solvedFields = new List<Field>(Fields);
         while (!finished)
@@ -51,6 +52,8 @@ public class NewSolver
         }
         return true;
     }
+
+    protected virtual void InitialReducing() { }
 
     private bool ReduceLists(List<Field> FinishedFields)
     {

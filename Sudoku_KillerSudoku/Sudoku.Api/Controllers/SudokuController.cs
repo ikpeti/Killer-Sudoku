@@ -89,5 +89,16 @@ namespace Sudoku.Api.Controllers
             sudoku.Print();
             return Task.FromResult(sudoku.GetSolution());
         }
+
+        [HttpGet("/otherkillersudoku")]
+        public Task<List<int>> OtherKillerSolver()
+        {
+            var killersudoku = new NewKillerSolver(9, KillerSudokuExamples.FirstExample.KillerFields,
+                KillerSudokuExamples.FirstExample.KillerValues);
+            killersudoku.Print();
+            killersudoku.Solve();
+            killersudoku.Print();
+            return Task.FromResult(killersudoku.GetSolution());
+        }
     }
 }
