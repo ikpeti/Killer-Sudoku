@@ -19,9 +19,14 @@ public class Field
         }
     }
 
-    public void RemoveValue(int value)
+    public bool RemoveValue(int value)
     {
-        PossibleValues.Remove(value);
+        if (PossibleValues.Contains(value))
+        {
+            PossibleValues.Remove(value);
+            return true;
+        }
+        return false;
     }
 
     public void KeepValue(int value)

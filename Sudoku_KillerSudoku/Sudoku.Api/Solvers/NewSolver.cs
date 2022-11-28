@@ -39,7 +39,7 @@ public class NewSolver
         var solvedFields = new List<Field>(Fields);
         while (!finished)
         {
-            if (ReduceLists(solvedFields) || ReduceOtherRule())
+            if (ReduceLists(solvedFields) || ReduceOtherRule() || OtherRules())
                 solvedFields = NewSolvedFields();
             else
                 finished = true;
@@ -51,6 +51,11 @@ public class NewSolver
                 return false;
         }
         return true;
+    }
+
+    protected virtual bool OtherRules()
+    {
+        return false;
     }
 
     protected virtual void InitialReducing() { }
@@ -138,11 +143,14 @@ public class NewSolver
             if (field.PossibleValues.Count == 1)
             {
                 field.SetValue();
+                RefreshKillerValues(field);
                 result.Add(field);
             }
         }
         return result;
     }
+
+    protected virtual void RefreshKillerValues(Field field) { }
 
     private bool ReducePossibleFieldsListByNumber(Field f)
     {
@@ -153,8 +161,8 @@ public class NewSolver
                 continue;
             if (IsInRow(f, field) || IsInColumn(f, field) || IsInBox(f, field))
             {
-                field.RemoveValue(f.Value);
-                result = true;
+                if (field.RemoveValue(f.Value))
+                    result = true;
             }
         }
 
@@ -176,7 +184,7 @@ public class NewSolver
         return BoxNumber(f1) == BoxNumber(f2);
     }
 
-    private int BoxNumber(Field f)
+    protected int BoxNumber(Field f)
     {
         var boxSize = (int)Math.Sqrt(Size);
         int boxNumber = 1;
