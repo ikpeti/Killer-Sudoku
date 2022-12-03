@@ -201,10 +201,10 @@ public class SudokuBoard : ISudokuBoard
         switch (sudokuType)
         {
             case SudokuTypes.EASY:
-                numOfCells = 36;
+                numOfCells = 34;
                 break;
             case SudokuTypes.MEDIUM:
-                numOfCells = 32;
+                numOfCells = 31;
                 break;
             case SudokuTypes.HARD:
                 numOfCells = 28;

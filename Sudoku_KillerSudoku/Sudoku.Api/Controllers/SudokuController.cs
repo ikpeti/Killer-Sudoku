@@ -32,6 +32,7 @@ namespace Sudoku.Api.Controllers
                 }
             }
             solution.Solve();
+            solution.Print();
             var solutionList = new List<int>();
             for (int i = 0; i < solution.Size; i++)
             {
