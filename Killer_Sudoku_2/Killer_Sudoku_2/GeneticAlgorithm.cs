@@ -16,7 +16,7 @@ namespace Killer_Sudoku_2
         private List<Chromosome> newPopulation;
         private readonly Random random;
 
-        public GeneticAlgorithm(int populationSize, int geneSize, Random r, Action<int[][]> getRandomGenes, Func<int, int> fitnessFunction,
+        public GeneticAlgorithm(int populationSize, int geneSize, Action<int[][]> getRandomGenes, Func<int, int> fitnessFunction,
             int elitism = 10, double mutationRate = 0.1)
         {
             Population = new List<Chromosome>(populationSize);
@@ -24,7 +24,7 @@ namespace Killer_Sudoku_2
             Generation = 1;
             Elitism = elitism;
             MutationRate = mutationRate;
-            random = r;
+            random = new Random();
             BestGenes = new int[geneSize][];
             for (int i = 0; i < BestGenes.Length; i++)
             {
@@ -34,7 +34,7 @@ namespace Killer_Sudoku_2
 
             for (int i = 0; i < populationSize; i++)
             {
-                Population.Add(new Chromosome(geneSize, r, getRandomGenes, fitnessFunction, firstTime: true));
+                Population.Add(new Chromosome(geneSize, random, getRandomGenes, fitnessFunction, firstTime: true));
             }
         }
 

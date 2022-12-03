@@ -23,7 +23,7 @@ namespace Killer_Sudoku_2
             numberValues = new Dictionary<int, int>();
 
             SudokuConstants.SudokuProblem = testPuzzles[testN];
-            geneticAlgorithm = new GeneticAlgorithm(1000, 9, random, GetRandomGenes, KillerFitness);
+            geneticAlgorithm = new GeneticAlgorithm(1000, 9, GetRandomGenes, KillerFitness);
 
             PrintBoard(testPuzzles[testN]);
 
