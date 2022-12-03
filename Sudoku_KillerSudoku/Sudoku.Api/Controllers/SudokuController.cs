@@ -52,7 +52,7 @@ namespace Sudoku.Api.Controllers
         [HttpGet("/killer")]
         public Task<List<int>> GetResult()
         {
-            var killerSudoku = new KillerSudokuBoard();
+            var killerSudoku = new KillerSudokuBoard(KillerSudokuExamples.RecursionThirdExample);
             killerSudoku.Solve();
             var solutionList = new List<int>();
             for (int i = 0; i < killerSudoku.Size; i++)
@@ -68,7 +68,7 @@ namespace Sudoku.Api.Controllers
         [HttpGet("/otherkiller")]
         public Task<List<int>> GetOtherKillerResult()
         {
-            var killerSudoku = new KillerSudokuBoard();
+            var killerSudoku = new KillerSudokuBoard(KillerSudokuExamples.RecursionSecondExample);
             killerSudoku.KillerSolve();
             var solutionList = new List<int>();
             for (int i = 0; i < killerSudoku.Size; i++)
