@@ -17,19 +17,14 @@ public class SudokuGenerator : ISudokuGenerator
 
     public ISudokuBoard Generate()
     {
-        _sudokuBoard.Init(GenerateRookLayout());
-
-        _sudokuBoard.Solve();
-
-        _sudokuBoard.Generate(SudokuTypes.HARD);
-
-        while (_sudokuBoard.CheckGeneratedPuzzle() == 1)
+        do
         {
             _sudokuBoard.Init(GenerateRookLayout());
 
             _sudokuBoard.Solve();
+
             _sudokuBoard.Generate(SudokuTypes.HARD);
-        }
+        } while (_sudokuBoard.CheckGeneratedPuzzle() == 1);
 
         return _sudokuBoard;
     }
@@ -62,8 +57,7 @@ public class SudokuGenerator : ISudokuGenerator
 
     private bool IsValidPlace(int[,] layout, int row, int column)
     {
-        return !IsNumberInColumn(layout, column) &&
-            !IsNumberInBox(layout, row, column);
+        return !IsNumberInBox(layout, row, column);
     }
 
     private bool IsNumberInBox(int[,] layout, int row, int column)
