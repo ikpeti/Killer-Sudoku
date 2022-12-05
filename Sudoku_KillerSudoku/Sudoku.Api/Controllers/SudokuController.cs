@@ -84,7 +84,7 @@ namespace Sudoku.Api.Controllers
         [HttpGet("/othersudoku")]
         public Task<List<int>> OtherSudokuSolver()
         {
-            var sudoku = new NewSolver(9, SudokuExamples.Extreme);
+            var sudoku = new SudokuSolver(9, SudokuExamples.Extreme);
             sudoku.Print();
             sudoku.Solve();
             sudoku.Print();
@@ -94,8 +94,8 @@ namespace Sudoku.Api.Controllers
         [HttpGet("/otherkillersudoku")]
         public Task<List<int>> OtherKillerSolver()
         {
-            var killersudoku = new NewKillerSolver(9, KillerSudokuExamples.FirstExample.KillerFields,
-                KillerSudokuExamples.FirstExample.KillerValues);
+            var killersudoku = new KillerSolver(9, KillerSudokuExamples.SecondExample.KillerFields,
+                KillerSudokuExamples.SecondExample.KillerValues);
             killersudoku.Print();
             killersudoku.Solve();
             killersudoku.Print();

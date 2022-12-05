@@ -137,6 +137,285 @@ public static class KillerSudokuExamples
         }
     }
 
+    public static KillerValueModel SecondExample
+    {
+        get
+        {
+            var result = new KillerValueModel();
+            result.KillerFields = new List<List<int>>();
+            result.KillerValues = new List<int>();
+            result.KillerFields.AddRange(new List<List<int>>
+            {
+                new List<int>
+                {
+                    1, 10, 11, 20
+                },
+                new List<int>
+                {
+                    2, 3
+                },
+                new List<int>
+                {
+                    4, 13, 14
+                },
+                new List<int>
+                {
+                    5, 6
+                },
+                new List<int>
+                {
+                    7, 16, 25
+                },
+                new List<int>
+                {
+                    8, 17, 26, 27
+                },
+                new List<int>
+                {
+                    9, 18
+                },
+                new List<int>
+                {
+                    12, 21
+                },
+                new List<int>
+                {
+                    15, 22, 23, 24
+                },
+                new List<int>
+                {
+                    19, 28
+                },
+                new List<int>
+                {
+                    29, 38, 39, 40
+                },
+                new List<int>
+                {
+                    30, 31
+                },
+                new List<int>
+                {
+                    32, 41
+                },
+                new List<int>
+                {
+                    33, 42
+                },
+                new List<int>
+                {
+                    34, 35, 36, 45
+                },
+                new List<int>
+                {
+                    37, 46
+                },
+                new List<int>
+                {
+                    43, 44
+                },
+                new List<int>
+                {
+                    47, 48
+                },
+                new List<int>
+                {
+                    49, 50
+                },
+                new List<int>
+                {
+                    51, 52, 60
+                },
+                new List<int>
+                {
+                    53, 54, 63
+                },
+                new List<int>
+                {
+                    55, 64, 73
+                },
+                new List<int>
+                {
+                    56, 57
+                },
+                new List<int>
+                {
+                    58, 66, 67
+                },
+                new List<int>
+                {
+                    59, 68, 77
+                },
+                new List<int>
+                {
+                    61, 62
+                },
+                new List<int>
+                {
+                    65, 74
+                },
+                new List<int>
+                {
+                    69, 70, 78, 79
+                },
+                new List<int>
+                {
+                    71, 80
+                },
+                new List<int>
+                {
+                    72, 81
+                },
+                new List<int>
+                {
+                    75, 76
+                }
+            });
+            result.KillerValues.AddRange(new List<int>
+            {
+                17, 13, 20, 11, 18, 19, 8, 10, 14, 13, 11, 11, 16, 12, 19, 7, 9, 16, 7, 7, 15, 12, 11, 17, 10, 15, 12, 27, 4, 13, 11
+            });
+            return result;
+        }
+    }
+    public static KillerValueModel ThirdExample
+    {
+        get
+        {
+            var result = new KillerValueModel();
+            result.KillerFields = new List<List<int>>();
+            result.KillerValues = new List<int>();
+            result.KillerFields.AddRange(new List<List<int>>
+            {
+                new List<int>
+                {
+                    1, 10, 11, 12, 20
+                },
+                new List<int>
+                {
+                    2, 3
+                },
+                new List<int>
+                {
+                    4, 5, 6
+                },
+                new List<int>
+                {
+                    7, 8
+                },
+                new List<int>
+                {
+                    9, 18
+                },
+                new List<int>
+                {
+                    13, 14, 23
+                },
+                new List<int>
+                {
+                    15, 16
+                },
+                new List<int>
+                {
+                    17, 26, 27
+                },
+                new List<int>
+                {
+                    19, 28, 29
+                },
+                new List<int>
+                {
+                    21, 22, 30, 31
+                },
+                new List<int>
+                {
+                    24, 33
+                },
+                new List<int>
+                {
+                    25, 34
+                },
+                new List<int>
+                {
+                    32, 41
+                },
+                new List<int>
+                {
+                    35, 36, 44, 45
+                },
+                new List<int>
+                {
+                    37, 38, 47, 48
+                },
+                new List<int>
+                {
+                    39, 40
+                },
+                new List<int>
+                {
+                    42, 43, 51, 52
+                },
+                new List<int>
+                {
+                    46, 55
+                },
+                new List<int>
+                {
+                    49, 50
+                },
+                new List<int>
+                {
+                    53, 54, 62
+                },
+                new List<int>
+                {
+                    56, 57, 66
+                },
+                new List<int>
+                {
+                    58, 59
+                },
+                new List<int>
+                {
+                    60, 68, 69
+                },
+                new List<int>
+                {
+                    61, 70
+                },
+                new List<int>
+                {
+                    63, 72, 81
+                },
+                new List<int>
+                {
+                    64, 73
+                },
+                new List<int>
+                {
+                    65, 74, 75
+                },
+                new List<int>
+                {
+                    67, 76, 77
+                },
+                new List<int>
+                {
+                    71, 80
+                },
+                new List<int>
+                {
+                    78, 79
+                }
+            });
+            result.KillerValues.AddRange(new List<int>
+            {
+                26, 5, 23, 8, 14, 10, 5, 18, 15, 22, 9, 12, 7, 18, 23, 13, 23, 12, 10, 8, 17, 15, 7, 11, 14, 8, 11, 14, 17, 10
+            });
+            return result;
+        }
+    }
+
     public static Dictionary<List<Coordinate>, int> RecursionFirstExample
     {
         get

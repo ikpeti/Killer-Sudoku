@@ -42,4 +42,10 @@ public class Field
         Value = PossibleValues[0];
         PossibleValues.RemoveAt(0);
     }
+
+    public void SetValues(int value, List<int> possibleValues)
+    {
+        Value = value;
+        PossibleValues.RemoveAll(x => !possibleValues.Contains(x));
+    }
 }

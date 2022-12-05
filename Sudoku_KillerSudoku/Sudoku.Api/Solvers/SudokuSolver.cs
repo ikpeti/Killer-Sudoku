@@ -1,11 +1,11 @@
 ﻿using Sudoku.Api.Types;
 
 namespace Sudoku.Api.Solvers;
-public class NewSolver
+public class SudokuSolver
 {
     public int Size { get; }
     public List<Field> Fields { get; }
-    public NewSolver(int size, int[,]? sudoku = null)
+    public SudokuSolver(int size, int[,]? sudoku = null)
     {
         Size = size;
         Fields = new List<Field>();
@@ -35,25 +35,79 @@ public class NewSolver
     public bool Solve()
     {
         InitialReducing();
-        bool finished = false;
-        var solvedFields = new List<Field>(Fields);
-        while (!finished)
-        {
-            if (ReduceLists(solvedFields) || ReduceOtherRule() || OtherRules())
-                solvedFields = NewSolvedFields();
-            else
-                finished = true;
-        }
+        ReduceLists(Fields);
 
+        return FillFields(null);
+    }
+
+    private bool FillFields(Field? solvedField)
+    {
+        while (true)
+        {
+            if (WrongAlready())
+                return false;
+            if (ReduceByNewNumber(solvedField) || CheckRowsColumnsAndBoxes() || OtherKillerRules())
+            {
+                solvedField = NewSolvedField();
+            }
+            else
+            {
+                return FillFirstFieldRandomly();
+            }
+        }
+    }
+
+    private bool FillFirstFieldRandomly()
+    {
         foreach (var field in Fields)
         {
             if (field.Value == 0)
+            {
+                var tryValues = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+                tryValues.RemoveAll(x => !field.PossibleValues.Contains(x));
+                foreach (var value in tryValues)
+                {
+                    var boardState = SaveState();
+                    var actualField = Fields.Find(x => x.Coordinate.Equals(field.Coordinate.X, field.Coordinate.Y));
+                    if (actualField == null)
+                        throw new Exception();
+                    actualField.PossibleValues.RemoveAll(x => x != value);
+                    if (FillFields(NewSolvedField()))
+                    {
+                        return true;
+                    }
+                    Fields.Clear();
+                    Fields.AddRange(boardState);
+                    RefreshKillerValues();
+                }
                 return false;
+            }
         }
+
         return true;
     }
 
-    protected virtual bool OtherRules()
+    private bool WrongAlready()
+    {
+        var wrongItems = Fields.Where(x => x.Value == 0 && x.PossibleValues.Count == 0).FirstOrDefault();
+        return wrongItems != null;
+    }
+
+    protected virtual void RefreshKillerValues() { }
+
+    private List<Field> SaveState()
+    {
+        var result = new List<Field>();
+        foreach (var field in Fields)
+        {
+            var newField = new Field(field.Coordinate.X, field.Coordinate.Y);
+            newField.SetValues(field.Value, field.PossibleValues);
+            result.Add(newField);
+        }
+        return result;
+    }
+
+    protected virtual bool OtherKillerRules()
     {
         return false;
     }
@@ -67,14 +121,14 @@ public class NewSolver
         {
             if (field.Value == 0)
                 continue;
-            if (ReducePossibleFieldsListByNumber(field))
+            if (ReduceByNewNumber(field))
                 result = true;
         }
 
         return result;
     }
 
-    private bool ReduceOtherRule()
+    private bool CheckRowsColumnsAndBoxes()
     {
         for (int i = 0; i < Size; i++)
         {
@@ -135,25 +189,26 @@ public class NewSolver
         }
     }
 
-    private List<Field> NewSolvedFields()
+    private Field? NewSolvedField()
     {
-        var result = new List<Field>();
         foreach (var field in Fields)
         {
             if (field.PossibleValues.Count == 1)
             {
                 field.SetValue();
-                RefreshKillerValues(field);
-                result.Add(field);
+                ReduceKillerFields(field);
+                return field;
             }
         }
-        return result;
+        return null;
     }
 
-    protected virtual void RefreshKillerValues(Field field) { }
+    protected virtual void ReduceKillerFields(Field field) { }
 
-    private bool ReducePossibleFieldsListByNumber(Field f)
+    private bool ReduceByNewNumber(Field? f)
     {
+        if (f == null)
+            return false;
         var result = false;
         foreach (var field in Fields)
         {
