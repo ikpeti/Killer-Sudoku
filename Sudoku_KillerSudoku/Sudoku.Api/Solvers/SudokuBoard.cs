@@ -207,7 +207,7 @@ public class SudokuBoard : ISudokuBoard
                 numOfCells = 31;
                 break;
             case SudokuTypes.HARD:
-                numOfCells = 28;
+                numOfCells = 24;
                 break;
         }
 

@@ -17,6 +17,7 @@ public class SudokuGenerator : ISudokuGenerator
 
     public ISudokuBoard Generate()
     {
+        SudokuSolver solver;
         do
         {
             _sudokuBoard.Init(GenerateRookLayout());
@@ -24,12 +25,14 @@ public class SudokuGenerator : ISudokuGenerator
             _sudokuBoard.Solve();
 
             _sudokuBoard.Generate(SudokuTypes.HARD);
-        } while (_sudokuBoard.CheckGeneratedPuzzle() == 1);
+
+            solver = new SudokuSolver(_size, _sudokuBoard.Board);
+        } while (solver.Solve());
 
         return _sudokuBoard;
     }
 
-    private int[,] GenerateRookLayout()
+    public int[,] GenerateRookLayout()
     {
         var layout = new int[_size, _size];
 
@@ -75,17 +78,6 @@ public class SudokuGenerator : ISudokuGenerator
                     return true;
                 }
             }
-        }
-
-        return false;
-    }
-
-    private bool IsNumberInColumn(int[,] layout, int column)
-    {
-        for (int i = 0; i < _size; i++)
-        {
-            if (layout[i, column] != 0)
-                return true;
         }
 
         return false;

@@ -5,6 +5,7 @@ public class SudokuSolver
 {
     public int Size { get; }
     public List<Field> Fields { get; }
+    public List<List<Field>> Solutions { get; }
     public SudokuSolver(int size, int[,]? sudoku = null)
     {
         Size = size;
@@ -19,6 +20,7 @@ public class SudokuSolver
                     Fields.Add(new Field(i, j));
             }
         }
+        Solutions = new List<List<Field>>();
     }
 
     public List<int> GetSolution()
@@ -37,7 +39,15 @@ public class SudokuSolver
         InitialReducing();
         ReduceLists(Fields);
 
-        return FillFields(null);
+        var result = FillFields(null);
+        if (result && Solutions.Count == 1)
+        {
+            Fields.Clear();
+            Fields.AddRange(Solutions[0]);
+            return true;
+        }
+
+        return false;
     }
 
     private bool FillFields(Field? solvedField)
@@ -63,6 +73,7 @@ public class SudokuSolver
         {
             if (field.Value == 0)
             {
+                var result = false;
                 var tryValues = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
                 tryValues.RemoveAll(x => !field.PossibleValues.Contains(x));
                 foreach (var value in tryValues)
@@ -74,15 +85,19 @@ public class SudokuSolver
                     actualField.PossibleValues.RemoveAll(x => x != value);
                     if (FillFields(NewSolvedField()))
                     {
-                        return true;
+                        result = true;
+                        if (Solutions.Count > 1)
+                            return true;
                     }
                     Fields.Clear();
                     Fields.AddRange(boardState);
                     RefreshKillerValues();
                 }
-                return false;
+                return result;
             }
         }
+
+        Solutions.Add(SaveState());
 
         return true;
     }

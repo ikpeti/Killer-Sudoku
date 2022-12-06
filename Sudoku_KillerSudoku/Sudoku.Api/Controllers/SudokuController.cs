@@ -11,10 +11,12 @@ namespace Sudoku.Api.Controllers
     public class SudokuController : ControllerBase
     {
         private readonly ISudokuGenerator _generator;
+        private readonly ISudokuBoard _sudokuBoard;
 
-        public SudokuController(ISudokuGenerator generator)
+        public SudokuController(ISudokuGenerator generator, ISudokuBoard sudokuBoard)
         {
             _generator = generator;
+            _sudokuBoard = sudokuBoard;
         }
 
         [HttpGet]
@@ -100,6 +102,31 @@ namespace Sudoku.Api.Controllers
             killersudoku.Solve();
             killersudoku.Print();
             return Task.FromResult(killersudoku.GetSolution());
+        }
+
+        [HttpGet("/killergenerate")]
+        public Task<KillerSudokuViewModel> GetKillerSudoku()
+        {
+            var killerGenerator = new KillerSudokuGenerator(_sudokuBoard, _generator);
+            killerGenerator.Generate();
+
+            var killerSolver = new KillerSolver(9, killerGenerator.KillerFields, killerGenerator.KillerValues);
+            killerSolver.Solve();
+
+            var board = new List<int>();
+            for (int i = 0; i < 81; i++)
+            {
+                board.Add(0);
+            }
+
+            return Task.FromResult(new KillerSudokuViewModel
+            {
+                Size = killerSolver.Size,
+                Board = board,
+                Solution = killerSolver.GetSolution(),
+                KillerFields = killerGenerator.KillerFields,
+                KillerValues = killerGenerator.KillerValues
+            });
         }
     }
 }
