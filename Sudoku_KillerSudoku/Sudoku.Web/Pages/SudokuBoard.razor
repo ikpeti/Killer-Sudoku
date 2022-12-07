@@ -6,77 +6,41 @@
 <h2 id="errors">@errors</h2>
 <br />
 <div id="board">
-    @if(board != null){
-    @for(int i = 0; i < 9; i++)
+    @if(board == null)
     {
-        @for(int j = 0; j < 9; j++)
+        <h3>Loading...</h3>
+    }
+    else{
+        @for(int i = 0; i < 9; i++)
         {
-            int k = i;
-            int l = j;
-            int number = -board[i, j];
-            @if((i == 2 || i == 5) && (j == 2 || j == 5))
+            @for(int j = 0; j < 9; j++)
             {
-                @if (board[i, j] == 0)
+                int a = i;
+                int b = j;
+                <div id="@i.ToString() + - + @j.ToString()" class="tile" @onclick="() => SelectTile(a, b)">
+                    <div class="sum-number"></div>
+                    @if(@board[a, b] == 0)
+                    {
+                        <div class="value"></div>
+                    } else{
+                        <div class="value">@board[a, b]</div>
+                    }
+                </div>
+
+                @if (j == 2 || j == 5)
                 {
-                    <div id="@i.ToString() + - + @j.ToString()" class="horizontal-line vertical-line tile" @onclick="() => SelectTile(k, l)"/>
+                    <div class="vertical-line"/>
                 }
-                else if(board[i, j] > 0)
-                {
-                    <div id="@i.ToString() + - + @j.ToString()" class="horizontal-line vertical-line tile tile-start" @onclick="() => SelectTile(k, l)">@board[i, j]</div>
-                }
-                else
-                {
-                    <div id="@i.ToString() + - + @j.ToString()" class="horizontal-line vertical-line tile" @onclick="() => SelectTile(k, l)">@number</div>
-                }
-            }
-            else @if(i == 2 || i == 5)
+            }      
+
+            @if(i == 2 || i == 5)
             {
-                @if (board[i, j] == 0)
-                {
-                    <div id="@i.ToString() + - + @j.ToString()" class="horizontal-line tile" @onclick="() => SelectTile(k, l)"/>
-                }
-                else if(board[i, j] > 0)
-                {
-                    <div id="@i.ToString() + - + @j.ToString()" class="horizontal-line tile tile-start" @onclick="() => SelectTile(k, l)">@board[i, j]</div>
-                }
-                else
-                {
-                    <div id="@i.ToString() + - + @j.ToString()" class="horizontal-line tile" @onclick="() => SelectTile(k, l)">@number</div>
-                }
-            }
-            else @if(j == 2 || j == 5)
-            {
-                @if (board[i, j] == 0)
-                {
-                    <div id="@i.ToString() + - + @j.ToString()" class="vertical-line tile" @onclick="() => SelectTile(k, l)"/>
-                }
-                else if(board[i, j] > 0)
-                {
-                    <div id="@i.ToString() + - + @j.ToString()" class="vertical-line tile tile-start" @onclick="() => SelectTile(k, l)">@board[i, j]</div>
-                }
-                else
-                {
-                    <div id="@i.ToString() + - + @j.ToString()" class="vertical-line tile" @onclick="() => SelectTile(k, l)">@number</div>
-                }
-            }
-            else
-            {
-                @if (board[i, j] == 0)
-                {
-                    <div id="@i.ToString() + - + @j.ToString()" class="tile" @onclick="() => SelectTile(k, l)"/>
-                }
-                else if(board[i, j] > 0)
-                {
-                    <div id="@i.ToString() + - + @j.ToString()" class="tile tile-start" @onclick="() => SelectTile(k, l)">@board[i, j]</div>
-                }
-                else
-                {
-                    <div id="@i.ToString() + - + @j.ToString()" class="tile" @onclick="() => SelectTile(k, l)">@number</div>
-                }
+                <div class="horizontal-line"/>
             }
         }
-    }}
+    }
 </div>
+
 <br/>
 <div id="digits">
     @for(int i = 1; i <= 9; i++)
@@ -84,10 +48,16 @@
         int k = i;
         @if(i == @numberSelected)
         {
-            <div id="@i" class="number number-selected" @onclick="() => SelectNumber(k)">@i</div>
+            <div id="@i" class="number number-selected" @onclick="() => SelectNumber(k)">
+                <div class="sum-number"></div>
+                <div class="value">@i</div>
+            </div>
         }else
         {
-            <div id="@i" class="number" @onclick="() => SelectNumber(k)">@i</div>
+            <div id="@i" class="number" @onclick="() => SelectNumber(k)">
+                <div class="sum-number"></div>
+                <div class="value">@i</div>
+            </div>
         }
     }
 </div>

@@ -19,7 +19,7 @@ namespace Sudoku.Api.Controllers
             _sudokuBoard = sudokuBoard;
         }
 
-        [HttpGet]
+        [HttpGet("/sudoku")]
         public Task<SudokuViewModel> GetSudoku()
         {
             var sudokuBoard = _generator.Generate();
@@ -107,16 +107,24 @@ namespace Sudoku.Api.Controllers
         [HttpGet("/killergenerate")]
         public Task<KillerSudokuViewModel> GetKillerSudoku()
         {
-            var killerGenerator = new KillerSudokuGenerator(_sudokuBoard, _generator);
+            KillerSudokuGenerator killerGenerator = new KillerSudokuGenerator(_sudokuBoard, _generator);
             killerGenerator.Generate();
 
             var killerSolver = new KillerSolver(9, killerGenerator.KillerFields, killerGenerator.KillerValues);
-            killerSolver.Solve();
+            while (!killerSolver.Solve())
+            {
+                killerGenerator.FillAField(killerSolver.IndexOfLastChange);
+                killerSolver = new KillerSolver(9, killerGenerator.KillerFields, killerGenerator.KillerValues, killerGenerator.KillerBoard);
+            }
 
             var board = new List<int>();
-            for (int i = 0; i < 81; i++)
+
+            for (int i = 0; i < 9; i++)
             {
-                board.Add(0);
+                for (int j = 0; j < 9; j++)
+                {
+                    board.Add(killerGenerator.KillerBoard[i, j]);
+                }
             }
 
             return Task.FromResult(new KillerSudokuViewModel

@@ -1,6 +1,4 @@
-﻿using Sudoku.Api.Enums;
-
-namespace Sudoku.Api.Solvers;
+﻿namespace Sudoku.Api.Solvers;
 public class SudokuBoard : ISudokuBoard
 {
     public int Size { get; } = 9;
@@ -195,21 +193,9 @@ public class SudokuBoard : ISudokuBoard
             !IsNumberInBox(number, row, column, board);
     }
 
-    public void Generate(SudokuTypes sudokuType)
+    public void Generate()
     {
-        int numOfCells = 0;
-        switch (sudokuType)
-        {
-            case SudokuTypes.EASY:
-                numOfCells = 34;
-                break;
-            case SudokuTypes.MEDIUM:
-                numOfCells = 31;
-                break;
-            case SudokuTypes.HARD:
-                numOfCells = 24;
-                break;
-        }
+        int numOfCells = 32;
 
         List<int> remainingCells = new List<int>();
 

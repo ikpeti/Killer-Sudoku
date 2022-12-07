@@ -77,6 +77,7 @@ body {
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
+    align-content: center;
 }
 
 .tile {
@@ -87,8 +88,6 @@ body {
     font-size: 20px;
     font-weight: bold;
     display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 #digits {
@@ -108,18 +107,23 @@ body {
     font-size: 20px;
     font-weight: bold;
     display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .sum-number {
-    width: 15px;
-    height: 15px;
-    font-size: 10px;
+    width: 18px;
+    height: auto;
+    font-size: 11px;
     font-weight: bold;
     display: flex;
     justify-content: left;
-    align-items: start;
+}
+
+.value{
+    width: 34px;
+    height: auto;
+    display: flex;
+    justify-content: left;
+    align-items: center;
 }
 
 .number-selected {
@@ -131,7 +135,9 @@ body {
 }
 
 .horizontal-line {
-    border-bottom: 2px solid black;
+    width: 436px;
+    height: 1px;
+    border: 1px solid black;
 }
 
 .vertical-line {

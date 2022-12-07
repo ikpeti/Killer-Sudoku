@@ -8,7 +8,8 @@ public class KillerSudokuGenerator
     private Random random;
     public List<List<int>> KillerFields { get; }
     public List<int> KillerValues { get; set; }
-
+    public int[,] KillerBoard { get; }
+    private int size;
     public KillerSudokuGenerator(ISudokuBoard sudokuBoard, ISudokuGenerator sudokuGenerator)
     {
         this.sudokuBoard = sudokuBoard;
@@ -16,11 +17,34 @@ public class KillerSudokuGenerator
         this.random = new Random();
         KillerFields = new List<List<int>>();
         KillerValues = new List<int>();
+        KillerBoard = new int[sudokuBoard.Size, sudokuBoard.Size];
+        size = sudokuBoard.Size;
+        for (int i = 0; i < sudokuBoard.Size; i++)
+        {
+            for (int j = 0; j < sudokuBoard.Size; j++)
+            {
+                KillerBoard[i, j] = 0;
+            }
+        }
     }
 
     public ISudokuBoard GetBoard()
     {
         return sudokuBoard;
+    }
+
+    public void FillAField(int index)
+    {
+        int x = index / size;
+        int y = index % size;
+        if (y == 0)
+        {
+            x -= 1;
+            y = 9;
+        }
+        y -= 1;
+
+        KillerBoard[x, y] = sudokuBoard.Board[x, y];
     }
 
     public void Generate()
@@ -50,10 +74,10 @@ public class KillerSudokuGenerator
                         possibilities[0] = false;
                     }
 
-                    var number = random.Next(0, 2);
+                    var number = random.Next(0, 3);
                     while (!possibilities[number])
                     {
-                        number = random.Next(0, 2);
+                        number = random.Next(0, 3);
                     }
 
                     FinishField(i, j, sudokuBoard.Board[i, j], number);

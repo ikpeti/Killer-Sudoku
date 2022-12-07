@@ -4,4 +4,5 @@ namespace Sudoku.Web.Services;
 public interface ISudokuService
 {
     Task<SudokuViewModel?> GetSudoku();
+    Task<KillerSudokuViewModel?> GetKillerSudoku();
 }

@@ -6,6 +6,7 @@ public class SudokuSolver
     public int Size { get; }
     public List<Field> Fields { get; }
     public List<List<Field>> Solutions { get; }
+    public int IndexOfLastChange { get; private set; }
     public SudokuSolver(int size, int[,]? sudoku = null)
     {
         Size = size;
@@ -73,6 +74,7 @@ public class SudokuSolver
         {
             if (field.Value == 0)
             {
+                IndexOfLastChange = field.Coordinate.X * 9 + field.Coordinate.Y + 1;
                 var result = false;
                 var tryValues = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
                 tryValues.RemoveAll(x => !field.PossibleValues.Contains(x));
