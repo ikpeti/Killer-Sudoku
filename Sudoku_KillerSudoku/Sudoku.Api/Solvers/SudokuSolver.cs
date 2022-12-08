@@ -1,4 +1,5 @@
 ﻿using Sudoku.Api.Types;
+using System.Diagnostics;
 
 namespace Sudoku.Api.Solvers;
 public class SudokuSolver
@@ -7,6 +8,7 @@ public class SudokuSolver
     public List<Field> Fields { get; }
     public List<List<Field>> Solutions { get; }
     public int IndexOfLastChange { get; private set; }
+    private Stopwatch stopwatch;
     public SudokuSolver(int size, int[,]? sudoku = null)
     {
         Size = size;
@@ -22,6 +24,8 @@ public class SudokuSolver
             }
         }
         Solutions = new List<List<Field>>();
+        IndexOfLastChange = 0;
+        stopwatch = new Stopwatch();
     }
 
     public List<int> GetSolution()
@@ -40,6 +44,7 @@ public class SudokuSolver
         InitialReducing();
         ReduceLists(Fields);
 
+        stopwatch.Start();
         var result = FillFields(null);
         if (result && Solutions.Count == 1)
         {
@@ -47,7 +52,7 @@ public class SudokuSolver
             Fields.AddRange(Solutions[0]);
             return true;
         }
-
+        stopwatch.Reset();
         return false;
     }
 
@@ -74,6 +79,8 @@ public class SudokuSolver
         {
             if (field.Value == 0)
             {
+                if (stopwatch.Elapsed > TimeSpan.FromSeconds(5))
+                    return false;
                 IndexOfLastChange = field.Coordinate.X * 9 + field.Coordinate.Y + 1;
                 var result = false;
                 var tryValues = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };

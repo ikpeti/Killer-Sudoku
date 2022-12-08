@@ -9,7 +9,8 @@ public class KillerSudokuGenerator
     public List<List<int>> KillerFields { get; }
     public List<int> KillerValues { get; set; }
     public int[,] KillerBoard { get; }
-    private int size;
+    public int Size { get; set; }
+
     public KillerSudokuGenerator(ISudokuBoard sudokuBoard, ISudokuGenerator sudokuGenerator)
     {
         this.sudokuBoard = sudokuBoard;
@@ -18,7 +19,7 @@ public class KillerSudokuGenerator
         KillerFields = new List<List<int>>();
         KillerValues = new List<int>();
         KillerBoard = new int[sudokuBoard.Size, sudokuBoard.Size];
-        size = sudokuBoard.Size;
+        Size = sudokuBoard.Size;
         for (int i = 0; i < sudokuBoard.Size; i++)
         {
             for (int j = 0; j < sudokuBoard.Size; j++)
@@ -28,15 +29,31 @@ public class KillerSudokuGenerator
         }
     }
 
-    public ISudokuBoard GetBoard()
+    public List<int> Generate()
     {
-        return sudokuBoard;
+        TryGenerate();
+
+        var killerSolver = new KillerSolver(9, KillerFields, KillerValues);
+
+        while (!killerSolver.Solve())
+        {
+            if (!FillAField(killerSolver.IndexOfLastChange))
+            {
+                Reset();
+                TryGenerate();
+            }
+            killerSolver = new KillerSolver(9, KillerFields, KillerValues, KillerBoard);
+        }
+
+        return killerSolver.GetSolution();
     }
 
-    public void FillAField(int index)
+    public bool FillAField(int index)
     {
-        int x = index / size;
-        int y = index % size;
+        if (index == 0)
+            return false;
+        int x = index / Size;
+        int y = index % Size;
         if (y == 0)
         {
             x -= 1;
@@ -45,9 +62,10 @@ public class KillerSudokuGenerator
         y -= 1;
 
         KillerBoard[x, y] = sudokuBoard.Board[x, y];
+        return true;
     }
 
-    public void Generate()
+    private void TryGenerate()
     {
         sudokuBoard.Init(sudokuGenerator.GenerateRookLayout());
         sudokuBoard.Solve();
@@ -128,5 +146,18 @@ public class KillerSudokuGenerator
             }
         }
         return false;
+    }
+
+    private void Reset()
+    {
+        KillerFields.Clear();
+        KillerValues.Clear();
+        for (int i = 0; i < Size; i++)
+        {
+            for (int j = 0; j < Size; j++)
+            {
+                KillerBoard[i, j] = 0;
+            }
+        }
     }
 }
