@@ -1,5 +1,4 @@
-﻿using Sudoku.Api.Enums;
-using Sudoku.Api.Solvers;
+﻿using Sudoku.Api.Solvers;
 
 namespace Sudoku.Api.Generators;
 public class SudokuGenerator : ISudokuGenerator
@@ -17,39 +16,40 @@ public class SudokuGenerator : ISudokuGenerator
 
     public ISudokuBoard Generate()
     {
+        SudokuSolver solver;
         do
         {
             _sudokuBoard.Init(GenerateRookLayout());
 
             _sudokuBoard.Solve();
 
-            _sudokuBoard.Generate(SudokuTypes.HARD);
-        } while (_sudokuBoard.CheckGeneratedPuzzle() == 1);
+            _sudokuBoard.Generate();
+
+            solver = new SudokuSolver(_size, _sudokuBoard.Board);
+        } while (!solver.Solve());
 
         return _sudokuBoard;
     }
 
-    private int[,] GenerateRookLayout()
+    public int[,] GenerateRookLayout()
     {
         var layout = new int[_size, _size];
 
-        for (var i = 0; i < _size; i++)
-        {
-            var validIndexes = new List<int>
+        var validIndexes = new List<int>
             {
                 0, 1, 2, 3, 4, 5, 6, 7, 8
             };
-
+        for (var i = 0; i < _size; i++)
+        {
             int index = _random.Next(0, validIndexes.Count);
 
             while (!IsValidPlace(layout, i, validIndexes[index]))
             {
-                validIndexes.RemoveAt(index);
                 index = _random.Next(0, validIndexes.Count);
             }
 
-            layout[i, validIndexes[index]] = _random.Next(1, 10);
-
+            layout[i, validIndexes[index]] = 1;
+            validIndexes.RemoveAt(index);
         }
 
         return layout;
@@ -75,17 +75,6 @@ public class SudokuGenerator : ISudokuGenerator
                     return true;
                 }
             }
-        }
-
-        return false;
-    }
-
-    private bool IsNumberInColumn(int[,] layout, int column)
-    {
-        for (int i = 0; i < _size; i++)
-        {
-            if (layout[i, column] != 0)
-                return true;
         }
 
         return false;

@@ -11,13 +11,15 @@ namespace Sudoku.Api.Controllers
     public class SudokuController : ControllerBase
     {
         private readonly ISudokuGenerator _generator;
+        private readonly ISudokuBoard _sudokuBoard;
 
-        public SudokuController(ISudokuGenerator generator)
+        public SudokuController(ISudokuGenerator generator, ISudokuBoard sudokuBoard)
         {
             _generator = generator;
+            _sudokuBoard = sudokuBoard;
         }
 
-        [HttpGet]
+        [HttpGet("/sudoku")]
         public Task<SudokuViewModel> GetSudoku()
         {
             var sudokuBoard = _generator.Generate();
@@ -84,7 +86,7 @@ namespace Sudoku.Api.Controllers
         [HttpGet("/othersudoku")]
         public Task<List<int>> OtherSudokuSolver()
         {
-            var sudoku = new NewSolver(9, SudokuExamples.Extreme);
+            var sudoku = new SudokuSolver(9, SudokuExamples.Extreme);
             sudoku.Print();
             sudoku.Solve();
             sudoku.Print();
@@ -94,12 +96,45 @@ namespace Sudoku.Api.Controllers
         [HttpGet("/otherkillersudoku")]
         public Task<List<int>> OtherKillerSolver()
         {
-            var killersudoku = new NewKillerSolver(9, KillerSudokuExamples.FirstExample.KillerFields,
-                KillerSudokuExamples.FirstExample.KillerValues);
+            var killersudoku = new KillerSolver(9, KillerSudokuExamples.SecondExample.KillerFields,
+                KillerSudokuExamples.SecondExample.KillerValues);
             killersudoku.Print();
             killersudoku.Solve();
             killersudoku.Print();
             return Task.FromResult(killersudoku.GetSolution());
+        }
+
+        [HttpGet("/killergenerate")]
+        public Task<KillerSudokuViewModel> GetKillerSudoku()
+        {
+            KillerSudokuGenerator killerGenerator = new KillerSudokuGenerator(_sudokuBoard, _generator);
+            killerGenerator.Generate();
+
+            var killerSolver = new KillerSolver(9, killerGenerator.KillerFields, killerGenerator.KillerValues);
+            while (!killerSolver.Solve())
+            {
+                killerGenerator.FillAField(killerSolver.IndexOfLastChange);
+                killerSolver = new KillerSolver(9, killerGenerator.KillerFields, killerGenerator.KillerValues, killerGenerator.KillerBoard);
+            }
+
+            var board = new List<int>();
+
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    board.Add(killerGenerator.KillerBoard[i, j]);
+                }
+            }
+
+            return Task.FromResult(new KillerSudokuViewModel
+            {
+                Size = killerSolver.Size,
+                Board = board,
+                Solution = killerSolver.GetSolution(),
+                KillerFields = killerGenerator.KillerFields,
+                KillerValues = killerGenerator.KillerValues
+            });
         }
     }
 }

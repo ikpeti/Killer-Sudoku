@@ -1,6 +1,4 @@
-﻿using Sudoku.Api.Enums;
-
-namespace Sudoku.Api.Solvers;
+﻿namespace Sudoku.Api.Solvers;
 public interface ISudokuBoard
 {
     public int Size { get; }
@@ -9,5 +7,5 @@ public interface ISudokuBoard
     public void Print();
     public bool Solve();
     public int CheckGeneratedPuzzle();
-    public void Generate(SudokuTypes sudokuType);
+    public void Generate();
 }
