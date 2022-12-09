@@ -1,9 +1,127 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
-
-<h1>Hello, world!</h1>
-
-<a href="/sudokuboard">Sudoku</a>
+@inject ISudokuService sudokuService;
+<link href="css/app.css" rel="stylesheet" />
+<h1>Sudoku</h1>
+<h2 id="errors">@errors</h2>
 <br />
-<a href="/killersudoku">Killer Sudoku</a>
+<div id="board">
+    @if(board == null)
+    {
+        <h3>Loading...</h3>
+    }
+    else{
+        @for(int i = 0; i < 9; i++)
+        {
+            @for(int j = 0; j < 9; j++)
+            {
+                int a = i;
+                int b = j;
+                <div id="@i.ToString() + - + @j.ToString()" class="tile" @onclick="() => SelectTile(a, b)">
+                    <div class="sum-number"></div>
+                    @if(@board[a, b] == 0)
+                    {
+                        <div class="value"></div>
+                    } else{
+                        <div class="value">@board[a, b]</div>
+                    }
+                </div>
+
+                @if (j == 2 || j == 5)
+                {
+                    <div class="vertical-line"/>
+                }
+            }      
+
+            @if(i == 2 || i == 5)
+            {
+                <div class="horizontal-line"/>
+            }
+        }
+    }
+</div>
+
+<br/>
+<div id="digits">
+    @for(int i = 1; i <= 9; i++)
+    {
+        int k = i;
+        @if(i == @numberSelected)
+        {
+            <div id="@i" class="number number-selected" @onclick="() => SelectNumber(k)">
+                <div class="sum-number"></div>
+                <div class="value">@i</div>
+            </div>
+        }else
+        {
+            <div id="@i" class="number" @onclick="() => SelectNumber(k)">
+                <div class="sum-number"></div>
+                <div class="value">@i</div>
+            </div>
+        }
+    }
+</div>
+
+@code {
+    int numberSelected = 0;
+
+    int errors = 0;
+    int[,]? board;
+    int[,]? solution;
+
+    public void SelectNumber(int i)
+    {
+        numberSelected = i;
+    }
+
+    public void SelectTile(int i, int j)
+    {
+        if(board == null || solution == null)
+        {
+            return;
+        }
+        if(numberSelected != 0 && board[i, j] == 0)
+        {
+            if (numberSelected == solution[i, j])
+            {
+                board[i, j] = numberSelected;
+            }
+            else
+            {
+                errors++;
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var viewModel = await sudokuService.GetSudoku();
+        if (viewModel == null) {
+            board = null;
+            return;
+        }
+        board = new int[viewModel.Size, viewModel.Size];
+        solution = new int[viewModel.Size, viewModel.Size];
+        int z = 0;
+        for(int i = 0; i < viewModel.Size; i++)
+        {
+            for(int j = 0; j < viewModel.Size; j++)
+            {
+                board[i, j] = viewModel.Board[z];
+                z++;
+            }
+        }
+
+        z = 0;
+        for(int i = 0; i < viewModel.Size; i++)
+        {
+            for(int j = 0; j < viewModel.Size; j++)
+            {
+                solution[i, j] = viewModel.Solution[z];
+                z++;
+            }
+        }
+        
+    }
+}
+
