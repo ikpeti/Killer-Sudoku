@@ -1,51 +1,28 @@
-﻿using Sudoku.Api.Solvers;
-
-namespace Sudoku.Api.Generators;
-public class SudokuGenerator : ISudokuGenerator
+﻿namespace Sudoku.Api.Types;
+public class RookLayoutGenerator
 {
-    private readonly ISudokuBoard _sudokuBoard;
-    private readonly int _size;
-    private readonly Random _random;
-
-    public SudokuGenerator(ISudokuBoard sudokuBoard)
+    private readonly int size;
+    private Random random;
+    public RookLayoutGenerator(int size)
     {
-        _sudokuBoard = sudokuBoard;
-        _size = _sudokuBoard.Size;
-        _random = new Random();
+        random = new Random();
+        this.size = size;
     }
-
-    public ISudokuBoard Generate()
-    {
-        SudokuSolver solver;
-        do
-        {
-            _sudokuBoard.Init(GenerateRookLayout());
-
-            _sudokuBoard.Solve();
-
-            _sudokuBoard.Generate();
-
-            solver = new SudokuSolver(_size, _sudokuBoard.Board);
-        } while (!solver.Solve());
-
-        return _sudokuBoard;
-    }
-
     public int[,] GenerateRookLayout()
     {
-        var layout = new int[_size, _size];
+        var layout = new int[size, size];
 
         var validIndexes = new List<int>
             {
                 0, 1, 2, 3, 4, 5, 6, 7, 8
             };
-        for (var i = 0; i < _size; i++)
+        for (var i = 0; i < size; i++)
         {
-            int index = _random.Next(0, validIndexes.Count);
+            int index = random.Next(0, validIndexes.Count);
 
             while (!IsValidPlace(layout, i, validIndexes[index]))
             {
-                index = _random.Next(0, validIndexes.Count);
+                index = random.Next(0, validIndexes.Count);
             }
 
             layout[i, validIndexes[index]] = 1;
@@ -62,7 +39,7 @@ public class SudokuGenerator : ISudokuGenerator
 
     private bool IsNumberInBox(int[,] layout, int row, int column)
     {
-        var boxSize = (int)Math.Sqrt(_size);
+        var boxSize = (int)Math.Sqrt(size);
         var boxRow = row - row % boxSize;
         var boxColumn = column - column % boxSize;
 

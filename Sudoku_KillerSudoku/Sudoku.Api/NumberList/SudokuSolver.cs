@@ -1,7 +1,7 @@
 ﻿using Sudoku.Api.Types;
 using System.Diagnostics;
 
-namespace Sudoku.Api.Solvers;
+namespace Sudoku.Api.NumberList;
 public class SudokuSolver
 {
     public int Size { get; }

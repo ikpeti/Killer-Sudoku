@@ -1,6 +1,6 @@
 using Microsoft.Net.Http.Headers;
-using Sudoku.Api.Generators;
-using Sudoku.Api.Solvers;
+using Sudoku.Api.Recursive;
+using Sudoku.Api.Runners;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +11,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<ISudokuBoard, SudokuBoard>();
-builder.Services.AddScoped<ISudokuGenerator, SudokuGenerator>();
+builder.Services.AddScoped<ISudokuRunner, SudokuRunner>();
+builder.Services.AddScoped<IKillerSudokuRunner, KillerSudokuRunner>();
 
 var app = builder.Build();
 

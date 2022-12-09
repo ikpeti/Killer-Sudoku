@@ -1,21 +1,20 @@
-﻿using Sudoku.Api.Solvers;
+﻿using Sudoku.Api.Recursive;
+using Sudoku.Api.Types;
 
-namespace Sudoku.Api.Generators;
+namespace Sudoku.Api.NumberList;
 public class KillerSudokuGenerator
 {
-    private readonly ISudokuBoard sudokuBoard;
-    private readonly ISudokuGenerator sudokuGenerator;
+    private readonly SudokuBoard sudokuBoard;
     private Random random;
     public List<List<int>> KillerFields { get; }
-    public List<int> KillerValues { get; set; }
+    public List<int> KillerValues { get; private set; }
     public int[,] KillerBoard { get; }
     public int Size { get; set; }
 
-    public KillerSudokuGenerator(ISudokuBoard sudokuBoard, ISudokuGenerator sudokuGenerator)
+    public KillerSudokuGenerator()
     {
-        this.sudokuBoard = sudokuBoard;
-        this.sudokuGenerator = sudokuGenerator;
-        this.random = new Random();
+        sudokuBoard = new SudokuBoard();
+        random = new Random();
         KillerFields = new List<List<int>>();
         KillerValues = new List<int>();
         KillerBoard = new int[sudokuBoard.Size, sudokuBoard.Size];
@@ -31,7 +30,7 @@ public class KillerSudokuGenerator
 
     public List<int> Generate()
     {
-        TryGenerate();
+        KillerRulesGenerate();
 
         var killerSolver = new KillerSolver(9, KillerFields, KillerValues);
 
@@ -40,7 +39,7 @@ public class KillerSudokuGenerator
             if (!FillAField(killerSolver.IndexOfLastChange))
             {
                 Reset();
-                TryGenerate();
+                KillerRulesGenerate();
             }
             killerSolver = new KillerSolver(9, KillerFields, KillerValues, KillerBoard);
         }
@@ -48,7 +47,7 @@ public class KillerSudokuGenerator
         return killerSolver.GetSolution();
     }
 
-    public bool FillAField(int index)
+    private bool FillAField(int index)
     {
         if (index == 0)
             return false;
@@ -65,9 +64,9 @@ public class KillerSudokuGenerator
         return true;
     }
 
-    private void TryGenerate()
+    private void KillerRulesGenerate()
     {
-        sudokuBoard.Init(sudokuGenerator.GenerateRookLayout());
+        sudokuBoard.Init(new RookLayoutGenerator(Size).GenerateRookLayout());
         sudokuBoard.Solve();
 
         for (int i = 0; i < 9; i++)

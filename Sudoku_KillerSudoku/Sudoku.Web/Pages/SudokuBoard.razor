@@ -76,11 +76,15 @@
 
     public void SelectTile(int i, int j)
     {
+        if(board == null || solution == null)
+        {
+            return;
+        }
         if(numberSelected != 0 && board[i, j] == 0)
         {
             if (numberSelected == solution[i, j])
             {
-                board[i, j] = -numberSelected;
+                board[i, j] = numberSelected;
             }
             else
             {
@@ -92,6 +96,10 @@
     protected override async Task OnInitializedAsync()
     {
         var viewModel = await sudokuService.GetSudoku();
+        if (viewModel == null) {
+            board = null;
+            return;
+        }
         board = new int[viewModel.Size, viewModel.Size];
         solution = new int[viewModel.Size, viewModel.Size];
         int z = 0;

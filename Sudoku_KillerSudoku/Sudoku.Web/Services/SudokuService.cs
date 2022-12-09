@@ -13,14 +13,14 @@ public class SudokuService : ISudokuService
 
     public async Task<SudokuViewModel?> GetSudoku()
     {
-        var sudokuViewModel = await _httpClient.GetFromJsonAsync<SudokuViewModel?>("/sudoku");
+        var sudokuViewModel = await _httpClient.GetFromJsonAsync<SudokuViewModel?>("/api/sudoku");
 
         return sudokuViewModel;
     }
 
     public async Task<KillerSudokuViewModel?> GetKillerSudoku()
     {
-        var killersudokuViewModel = await _httpClient.GetFromJsonAsync<KillerSudokuViewModel?>("/killergenerate");
+        var killersudokuViewModel = await _httpClient.GetFromJsonAsync<KillerSudokuViewModel?>("/api/killersudoku");
 
         return killersudokuViewModel;
     }

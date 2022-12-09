@@ -1,6 +1,6 @@
 ﻿using Sudoku.Api.Types;
 
-namespace Sudoku.Api.Solvers;
+namespace Sudoku.Api.NumberList;
 public class KillerSolver : SudokuSolver
 {
     private Dictionary<List<Field>, int> _killerValues;

@@ -1,5 +1,5 @@
-﻿namespace Sudoku.Api.Solvers;
-public class SudokuBoard : ISudokuBoard
+﻿namespace Sudoku.Api.Recursive;
+public class SudokuBoard
 {
     public int Size { get; } = 9;
     public virtual int[,] Board { get; protected set; }

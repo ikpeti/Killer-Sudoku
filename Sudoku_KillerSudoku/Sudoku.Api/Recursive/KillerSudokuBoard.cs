@@ -1,6 +1,6 @@
 ﻿using Sudoku.Api.Types;
 
-namespace Sudoku.Api.Solvers;
+namespace Sudoku.Api.Recursive;
 public class KillerSudokuBoard : SudokuBoard
 {
     private Dictionary<List<Coordinate>, int> _killerValues;
